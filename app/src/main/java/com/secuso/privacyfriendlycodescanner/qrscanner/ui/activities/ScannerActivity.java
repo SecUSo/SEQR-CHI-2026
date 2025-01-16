@@ -18,6 +18,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,11 +120,21 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         beepManager.playBeepSoundAndVibrate();
 
         if (ResultParser.parseResult(result.getResult()).getType() == ParsedResultType.URI) {
+            String uri = ((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI();
             View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
             urlDialog.setVisibility(View.VISIBLE);
 
-            TextView domainTextView = findViewById(R.id.url_dialog_domain);
-            domainTextView.setText(Utils.extractHostFromURI(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI()).toLowerCase());
+            Button domainTextView = findViewById(R.id.url_dialog_domain);
+            domainTextView.setText(Utils.extractHostFromURI(uri.toLowerCase()));
+            domainTextView.setOnClickListener(view -> {
+                new MaterialAlertDialogBuilder(this)
+                        .setMessage(Utils.getHostHighlightingURI(uri, view.getContext()))
+                        .setTitle(R.string.full_url_dialog_title)
+                        .setIcon(R.drawable.ic_baseline_public_24dp)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.okay, null)
+                        .show();
+            });
 
             findViewById(R.id.url_dialog_continue_button).setOnClickListener(view -> {
                 ResultActivity.startResultActivity(ScannerActivity.this, result);

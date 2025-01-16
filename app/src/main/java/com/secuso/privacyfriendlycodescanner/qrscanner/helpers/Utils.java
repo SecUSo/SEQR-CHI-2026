@@ -3,9 +3,17 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.helpers;
 import static com.google.zxing.EncodeHintType.ERROR_CORRECTION;
 import static com.google.zxing.ResultMetadataType.ERROR_CORRECTION_LEVEL;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
 
@@ -22,6 +30,8 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -151,5 +161,27 @@ public class Utils {
             host = uriString;
         }
         return host;
+    }
+
+    public static Spannable getHostHighlightingURI(String uriString, Context context) {
+        String host = extractHostFromURI(uriString);
+
+        Pattern pattern = Pattern.compile("([0-9a-zA-ZäöüÄÖÜß-]*\\.(co.uk|com.de|de.com|co.at|[a-zA-Z]{2,}))$");
+
+        Matcher m = pattern.matcher(host);
+        if (m.find()) host = m.group(1);
+
+        int start = uriString.indexOf(host);
+        int end = start + host.length();
+
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.colorURLHighlight, typedValue, true);
+        int highlightColor = typedValue.data;
+
+        Spannable resultSpannable = new SpannableString(uriString);
+        resultSpannable.setSpan(new ForegroundColorSpan(highlightColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        resultSpannable.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return resultSpannable;
     }
 }
