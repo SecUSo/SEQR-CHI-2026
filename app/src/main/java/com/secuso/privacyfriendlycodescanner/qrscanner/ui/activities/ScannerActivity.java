@@ -2,6 +2,9 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -115,7 +118,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             return;
         }
 
-        barcodeScannerView.setStatusText(result.getText());
+        //barcodeScannerView.setStatusText(result.getText());
 
         beepManager.playBeepSoundAndVibrate();
 
@@ -127,13 +130,19 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             Button domainTextView = findViewById(R.id.url_dialog_domain);
             domainTextView.setText(Utils.extractHostFromURI(uri.toLowerCase()));
             domainTextView.setOnClickListener(view -> {
-                new MaterialAlertDialogBuilder(this)
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                         .setMessage(Utils.getHostHighlightingURI(uri, view.getContext()))
                         .setTitle(R.string.full_url_dialog_title)
                         .setIcon(R.drawable.ic_baseline_public_24dp)
                         .setCancelable(true)
-                        .setPositiveButton(R.string.okay, null)
-                        .show();
+                        .setNegativeButton(R.string.okay, null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    builder.setPositiveButton(R.string.copy_to_clipboard, (dialog, which) -> {
+                        ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Text", uri));
+                        Toast.makeText(this, R.string.content_copied, Toast.LENGTH_SHORT).show();
+                    });
+                }
+                builder.show();
             });
 
             findViewById(R.id.url_dialog_continue_button).setOnClickListener(view -> {
