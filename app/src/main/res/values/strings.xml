@@ -361,6 +361,9 @@
         <item>Brave</item>
     </string-array>
     <string name="pref_search_engine_default" translatable="false">DUCK_DUCK_GO</string>
+    <string name="url_dialog_risk_explanation_low_risk_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
+    <string name="url_dialog_continue_button">Open website adress now</string>
+    <string name="url_dialog_risk_explanation_low_risk_part_2">is well established.</string>
     <string-array name="pref_search_engine_values" translatable="false">
         <item>DUCK_DUCK_GO</item>
         <item>GOOGLE</item>

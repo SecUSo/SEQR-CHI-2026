@@ -32,6 +32,9 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.client.android.Intents;
+import com.google.zxing.client.result.ParsedResultType;
+import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.client.result.URIParsedResult;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CameraPreview;
@@ -40,6 +43,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.BaseActivity;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.ScannerViewModel;
 
@@ -114,7 +118,19 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         beepManager.playBeepSoundAndVibrate();
 
-        ResultActivity.startResultActivity(ScannerActivity.this, result);
+        if (ResultParser.parseResult(result.getResult()).getType() == ParsedResultType.URI) {
+            View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
+            urlDialog.setVisibility(View.VISIBLE);
+
+            TextView domainTextView = findViewById(R.id.url_dialog_domain);
+            domainTextView.setText(Utils.extractHostFromURI(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI()).toLowerCase());
+
+            findViewById(R.id.url_dialog_continue_button).setOnClickListener(view -> {
+                ResultActivity.startResultActivity(ScannerActivity.this, result);
+            });
+        } else {
+            ResultActivity.startResultActivity(ScannerActivity.this, result);
+        }
 //            Intent resultIntent = new Intent(ScannerActivity.this, ResultActivity.class);
 //            resultIntent.putExtra("QRResult", new ParcelableResultDecorator(result.getResult()), result.getBitmapWithResultPoints());
 //            startActivity(resultIntent);
@@ -134,6 +150,10 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         barcodeScannerView = findViewById(R.id.zxing_barcode_scanner);
 
         barcodeScannerView.getBarcodeView().addStateListener(stateListener);
+
+        findViewById(R.id.dialog_close_button).setOnClickListener(view -> {
+            findViewById(R.id.activity_scanner_url_dialog).setVisibility(View.INVISIBLE);
+        });
 
         beepManager = new BeepManager(this);
 

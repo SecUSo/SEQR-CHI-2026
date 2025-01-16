@@ -5,6 +5,7 @@ import static com.google.zxing.ResultMetadataType.ERROR_CORRECTION_LEVEL;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 
 import androidx.annotation.DrawableRes;
 
@@ -141,5 +142,14 @@ public class Utils {
         currentHistoryItem.setTimestamp(currentBarcodeResult.getResult().getTimestamp());
 
         return currentHistoryItem;
+    }
+
+    public static String extractHostFromURI(String uriString) {
+        Uri uri = Uri.parse(uriString);
+        String host = uri.getHost();
+        if (host == null) {
+            host = uriString;
+        }
+        return host;
     }
 }
