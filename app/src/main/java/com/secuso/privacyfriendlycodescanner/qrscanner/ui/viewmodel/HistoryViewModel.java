@@ -9,7 +9,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppRepository;
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

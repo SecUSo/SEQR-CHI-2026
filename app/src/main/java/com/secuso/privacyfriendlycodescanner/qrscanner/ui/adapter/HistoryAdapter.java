@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.google.zxing.client.result.ResultParser;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppRepository;
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 import com.secuso.privacyfriendlycodescanner.qrscanner.databinding.ItemHistoryCodeBinding;
 import com.secuso.privacyfriendlycodescanner.qrscanner.generator.Contents;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;

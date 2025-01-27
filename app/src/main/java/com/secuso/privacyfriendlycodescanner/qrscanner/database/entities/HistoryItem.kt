@@ -1,4 +1,4 @@
-package com.secuso.privacyfriendlycodescanner.qrscanner.database
+package com.secuso.privacyfriendlycodescanner.qrscanner.database.entities
 
 import android.graphics.Bitmap
 import android.os.Parcel

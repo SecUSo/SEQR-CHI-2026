@@ -1,13 +1,12 @@
 package com.secuso.privacyfriendlycodescanner.qrscanner.ui.adapter
 
-import android.util.Log
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities.HistoryActivity
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.adapter.HistoryAdapter.HistoryItemViewHolder
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.HistoryViewModel

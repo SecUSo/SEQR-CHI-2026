@@ -36,7 +36,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppRepository;
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 import com.secuso.privacyfriendlycodescanner.qrscanner.generator.Contents;
 import com.secuso.privacyfriendlycodescanner.qrscanner.generator.QRGeneratorUtils;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;

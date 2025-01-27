@@ -19,7 +19,7 @@ import com.google.zxing.client.result.ResultParser;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppRepository;
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 
 public class ResultViewModel extends AndroidViewModel {

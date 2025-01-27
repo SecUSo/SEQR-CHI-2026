@@ -13,6 +13,8 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.google.zxing.BarcodeFormat;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.daos.HistoryDao;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 
 import java.util.GregorianCalendar;

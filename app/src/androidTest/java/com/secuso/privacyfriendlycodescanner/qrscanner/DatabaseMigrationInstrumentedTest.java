@@ -11,7 +11,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppDatabase;
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.DBHandler;
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.HistoryItem;
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.ScannedData;
 
 import org.junit.After;

@@ -1,4 +1,4 @@
-package com.secuso.privacyfriendlycodescanner.qrscanner.database;
+package com.secuso.privacyfriendlycodescanner.qrscanner.database.daos;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HistoryItem;
 
 import java.util.List;
 
