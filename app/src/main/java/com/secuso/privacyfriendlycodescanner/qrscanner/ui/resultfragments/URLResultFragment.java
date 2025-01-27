@@ -2,16 +2,10 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.ui.resultfragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +17,7 @@ import androidx.annotation.NonNull;
 
 import com.google.zxing.client.result.URIParsedResult;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 
 public class URLResultFragment extends ResultFragment {
     private static final String VALID_RFC3986_PROTOCOL_SCHEME = "^[a-zA-Z][a-zA-Z0-9+.-]*:.*$";
@@ -54,30 +46,9 @@ public class URLResultFragment extends ResultFragment {
         TextView furtherInfo = (TextView) v.findViewById(R.id.textLink);
         furtherInfo.setMovementMethod(LinkMovementMethod.getInstance());
 
-        Uri uri = Uri.parse(qrurl);
-        String host = uri.getHost();
-        if (host == null) {
-            host = qrurl;
-        }
+        Spannable urlWithHighlighting = Utils.getHostHighlightingURI(qrurl, requireContext());
 
-        Pattern pattern = Pattern.compile("([0-9a-zA-ZäöüÄÖÜß-]*\\.(co.uk|com.de|de.com|co.at|[a-zA-Z]{2,}))$");
-
-        Matcher m = pattern.matcher(host);
-        if (m.find()) host = m.group(1);
-
-        int start = qrurl.indexOf(host);
-        int end = start + host.length();
-
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = requireContext().getTheme();
-        theme.resolveAttribute(R.attr.colorURLHighlight, typedValue, true);
-        int highlightColor = typedValue.data;
-
-        Spannable WordtoSpan = new SpannableString(qrurl);
-        WordtoSpan.setSpan(new ForegroundColorSpan(highlightColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        WordtoSpan.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        resultText.setText(WordtoSpan);
+        resultText.setText(urlWithHighlighting);
 
         // checked = trust = getBoolean("trust", false);
 
