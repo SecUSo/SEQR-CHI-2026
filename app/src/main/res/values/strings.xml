@@ -361,9 +361,13 @@
         <item>Brave</item>
     </string-array>
     <string name="pref_search_engine_default" translatable="false">DUCK_DUCK_GO</string>
-    <string name="url_dialog_risk_explanation_low_risk_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
     <string name="url_dialog_continue_button">Open website adress now</string>
+    <string name="url_dialog_risk_explanation_low_risk_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
     <string name="url_dialog_risk_explanation_low_risk_part_2">is well established.</string>
+    <string name="url_dialog_risk_explanation_unknown_risk_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
+    <string name="url_dialog_risk_explanation_unknown_risk_part_2">before opening the website address.</string>
+    <string name="url_dialog_risk_explanation_blue_risk_part_1"><b>\?\?\? Risk:</b> \?\?\?\?</string>
+    <string name="url_dialog_risk_explanation_blue_risk_part_2">\?\?\?\?</string>
     <string name="full_url_dialog_title">Full URL</string>
     <string-array name="pref_search_engine_values" translatable="false">
         <item>DUCK_DUCK_GO</item>

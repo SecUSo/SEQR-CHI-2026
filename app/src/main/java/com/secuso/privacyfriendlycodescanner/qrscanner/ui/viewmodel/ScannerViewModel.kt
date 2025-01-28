@@ -22,6 +22,12 @@ import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.Result
 import com.google.zxing.common.HybridBinarizer
 import com.journeyapps.barcodescanner.BarcodeResult
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.HostsDatabase
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HostEntity
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.BLUE_CASE_VISITS_REQUIRED
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.HOSTS_LIST
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,6 +37,11 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     private val scanResult: MutableLiveData<BarcodeResult?> = MutableLiveData()
     private val processingScan: MutableLiveData<Boolean> = MutableLiveData(false)
     private val scanComplete: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val hostsDatabase = HostsDatabase.getDatabase(application)
+
+    private val _classification = MutableLiveData<HostClassification?>()
+    val classification: LiveData<HostClassification?>
+        get() = _classification
 
     val onScaleGestureListener = CustomOnScaleGestureListener(this)
     private var _cameraZoomLevel: MutableLiveData<Float> = MutableLiveData(0.0f);
@@ -171,6 +182,41 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
             return@withContext null
+        }
+    }
+
+    fun initURLDialog(uri: String) {
+        viewModelScope.launch {
+            val host = Utils.extractHostFromURI(uri)
+            val classification =
+                if (HOSTS_LIST.contains(host.lowercase())) {
+                    HostClassification.Case.GREEN
+                } else if (hostsDatabase.hostDao().getHost(host) != null
+                    && hostsDatabase.hostDao().getHost(host)!!.visits >= BLUE_CASE_VISITS_REQUIRED
+                ) {
+                    HostClassification.Case.BLUE
+                } else {
+                    HostClassification.Case.GRAY
+                }
+            this@ScannerViewModel._classification.postValue(HostClassification(uri, classification))
+        }
+    }
+
+    fun incrementVisits(classification: HostClassification) {
+        if (classification.case == HostClassification.Case.GREEN) {
+            return
+        }
+        viewModelScope.launch {
+            val host = Utils.extractHostFromURI(classification.uri)
+            if (classification.case == HostClassification.Case.GRAY || classification.case == HostClassification.Case.BLUE) {
+                var hostEntity = hostsDatabase.hostDao().getHost(host)
+                if (hostEntity == null) {
+                    hostEntity = HostEntity(0, host, 0)
+                    hostsDatabase.hostDao().insert(hostEntity)
+                    hostEntity = hostsDatabase.hostDao().getHost(host)
+                }
+                hostsDatabase.hostDao().incrementVisits(hostEntity!!.id)
+            }
         }
     }
 

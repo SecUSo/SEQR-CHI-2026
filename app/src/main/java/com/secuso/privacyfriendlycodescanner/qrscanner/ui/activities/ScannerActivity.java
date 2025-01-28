@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.BaseActivity;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.ScannerViewModel;
@@ -124,29 +127,11 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         if (ResultParser.parseResult(result.getResult()).getType() == ParsedResultType.URI) {
             String uri = ((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI();
-            View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
-            urlDialog.setVisibility(View.VISIBLE);
-
-            Button domainTextView = findViewById(R.id.url_dialog_domain);
-            domainTextView.setText(Utils.extractHostFromURI(uri.toLowerCase()));
-            domainTextView.setOnClickListener(view -> {
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
-                        .setMessage(Utils.getHostHighlightingURI(uri, view.getContext()))
-                        .setTitle(R.string.full_url_dialog_title)
-                        .setIcon(R.drawable.ic_baseline_public_24dp)
-                        .setCancelable(true)
-                        .setNegativeButton(R.string.okay, null);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    builder.setPositiveButton(R.string.copy_to_clipboard, (dialog, which) -> {
-                        ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Text", uri));
-                        Toast.makeText(this, R.string.content_copied, Toast.LENGTH_SHORT).show();
-                    });
+            viewModel.initURLDialog(uri);
+            viewModel.getClassification().observe(this, hostClassification -> {
+                if (hostClassification != null) {
+                    showURLDialog(hostClassification, result);
                 }
-                builder.show();
-            });
-
-            findViewById(R.id.url_dialog_continue_button).setOnClickListener(view -> {
-                ResultActivity.startResultActivity(ScannerActivity.this, result);
             });
         } else {
             ResultActivity.startResultActivity(ScannerActivity.this, result);
@@ -154,6 +139,41 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 //            Intent resultIntent = new Intent(ScannerActivity.this, ResultActivity.class);
 //            resultIntent.putExtra("QRResult", new ParcelableResultDecorator(result.getResult()), result.getBitmapWithResultPoints());
 //            startActivity(resultIntent);
+    }
+
+    private void showURLDialog(HostClassification classification, BarcodeResult result) {
+        View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
+        urlDialog.setVisibility(View.VISIBLE);
+
+        ColorStateList colorStateList = new ColorStateList(new int[][]{new int[]{android.R.attr.state_enabled}}, new int[]{classification.getCase().getColor(urlDialog.getContext())});
+        ((ImageView) findViewById(R.id.dialog_border)).setImageTintList(colorStateList);
+        findViewById(R.id.url_dialog_continue_button).setBackgroundTintList(colorStateList);
+
+        ((TextView) findViewById(R.id.url_dialog_risk_explanation_part_1)).setText(classification.getCase().getTexts()[0]);
+        ((TextView) findViewById(R.id.url_dialog_risk_explanation_part_2)).setText(classification.getCase().getTexts()[1]);
+
+        Button domainTextView = findViewById(R.id.url_dialog_domain);
+        domainTextView.setText(Utils.extractHostFromURI(classification.getUri().toLowerCase()));
+        domainTextView.setOnClickListener(view -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
+                    .setMessage(Utils.getHostHighlightingURI(classification.getUri(), view.getContext()))
+                    .setTitle(R.string.full_url_dialog_title)
+                    .setIcon(R.drawable.ic_baseline_public_24dp)
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.okay, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                builder.setPositiveButton(R.string.copy_to_clipboard, (dialog, which) -> {
+                    ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Text", classification.getUri()));
+                    Toast.makeText(this, R.string.content_copied, Toast.LENGTH_SHORT).show();
+                });
+            }
+            builder.show();
+        });
+
+        findViewById(R.id.url_dialog_continue_button).setOnClickListener(view -> {
+            viewModel.incrementVisits(classification);
+            ResultActivity.startResultActivity(ScannerActivity.this, result);
+        });
     }
 
     @Override
@@ -173,6 +193,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         findViewById(R.id.dialog_close_button).setOnClickListener(view -> {
             findViewById(R.id.activity_scanner_url_dialog).setVisibility(View.INVISIBLE);
+            initScan();
         });
 
         beepManager = new BeepManager(this);
