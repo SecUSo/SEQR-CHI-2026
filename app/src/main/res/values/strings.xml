@@ -368,6 +368,7 @@
     <string name="url_dialog_risk_explanation_unknown_risk_part_2">before opening the website address.</string>
     <string name="url_dialog_risk_explanation_blue_risk_part_1"><b>\?\?\? Risk:</b> \?\?\?\?</string>
     <string name="url_dialog_risk_explanation_blue_risk_part_2">\?\?\?\?</string>
+    <string name="url_dialog_website_open_time">This website address can be opened in %ds</string>
     <string name="full_url_dialog_title">Full URL</string>
     <string-array name="pref_search_engine_values" translatable="false">
         <item>DUCK_DUCK_GO</item>

@@ -26,9 +26,11 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.database.HostsDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HostEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.BLUE_CASE_VISITS_REQUIRED
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.GRAY_CASE_WAITING_TIME
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.HOSTS_LIST
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.EnumMap
@@ -42,6 +44,11 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
     private val _classification = MutableLiveData<HostClassification?>()
     val classification: LiveData<HostClassification?>
         get() = _classification
+
+    private val _urlDialogContinueButtonTimer = MutableLiveData<Long>()
+    val urlDialogContinueButtonTimer: LiveData<Long>
+        get() = _urlDialogContinueButtonTimer
+    val urlDialogContinueButtonPeriodicTrigger = MutableLiveData<Unit>()
 
     val onScaleGestureListener = CustomOnScaleGestureListener(this)
     private var _cameraZoomLevel: MutableLiveData<Float> = MutableLiveData(0.0f);
@@ -216,6 +223,23 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
                     hostEntity = hostsDatabase.hostDao().getHost(host)
                 }
                 hostsDatabase.hostDao().incrementVisits(hostEntity!!.id)
+            }
+        }
+    }
+
+    fun initContinueButton(classification: HostClassification) {
+        if (classification.case == HostClassification.Case.GREEN
+            || classification.case == HostClassification.Case.BLUE
+        ) {
+            _urlDialogContinueButtonTimer.value = System.currentTimeMillis()
+        } else {
+            _urlDialogContinueButtonTimer.value = System.currentTimeMillis() + GRAY_CASE_WAITING_TIME
+        }
+        viewModelScope.launch {
+            urlDialogContinueButtonPeriodicTrigger.postValue(Unit)
+            while ((_urlDialogContinueButtonTimer.value ?: (System.currentTimeMillis() + GRAY_CASE_WAITING_TIME)) > System.currentTimeMillis()) {
+                delay(100)
+                urlDialogContinueButtonPeriodicTrigger.postValue(Unit)
             }
         }
     }

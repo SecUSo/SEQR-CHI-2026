@@ -145,13 +145,16 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
         urlDialog.setVisibility(View.VISIBLE);
 
+        // Set the color based on the classification
         ColorStateList colorStateList = new ColorStateList(new int[][]{new int[]{android.R.attr.state_enabled}}, new int[]{classification.getCase().getColor(urlDialog.getContext())});
         ((ImageView) findViewById(R.id.dialog_border)).setImageTintList(colorStateList);
         findViewById(R.id.url_dialog_continue_button).setBackgroundTintList(colorStateList);
 
+        // Set the texts based on the classification
         ((TextView) findViewById(R.id.url_dialog_risk_explanation_part_1)).setText(classification.getCase().getTexts()[0]);
         ((TextView) findViewById(R.id.url_dialog_risk_explanation_part_2)).setText(classification.getCase().getTexts()[1]);
 
+        // Set the dialog to be shown when clicking on the info button
         Button domainTextView = findViewById(R.id.url_dialog_domain);
         domainTextView.setText(Utils.extractHostFromURI(classification.getUri().toLowerCase()));
         domainTextView.setOnClickListener(view -> {
@@ -161,18 +164,35 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
                     .setIcon(R.drawable.ic_baseline_public_24dp)
                     .setCancelable(true)
                     .setNegativeButton(R.string.okay, null);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                builder.setPositiveButton(R.string.copy_to_clipboard, (dialog, which) -> {
-                    ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Text", classification.getUri()));
-                    Toast.makeText(this, R.string.content_copied, Toast.LENGTH_SHORT).show();
-                });
-            }
+            builder.setPositiveButton(R.string.copy_to_clipboard, (dialog, which) -> {
+                ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Text", classification.getUri()));
+                Toast.makeText(this, R.string.content_copied, Toast.LENGTH_SHORT).show();
+            });
             builder.show();
         });
 
-        findViewById(R.id.url_dialog_continue_button).setOnClickListener(view -> {
-            viewModel.incrementVisits(classification);
-            ResultActivity.startResultActivity(ScannerActivity.this, result);
+        // Initialize the timer for the continue button based on the classification
+        viewModel.initContinueButton(classification);
+        viewModel.getUrlDialogContinueButtonPeriodicTrigger().observe(this, unit -> {
+            if (!viewModel.getUrlDialogContinueButtonTimer().isInitialized()) {
+                return;
+            }
+            long enableTime = viewModel.getUrlDialogContinueButtonTimer().getValue();
+            int timeRemaining = (int) Math.ceil((enableTime - System.currentTimeMillis()) / 1000f);
+
+
+            Button continueButton = findViewById(R.id.url_dialog_continue_button);
+            if (timeRemaining > 0) {
+                continueButton.setText(getString(R.string.url_dialog_website_open_time, timeRemaining));
+                continueButton.setOnClickListener(view -> {
+                });
+            } else {
+                continueButton.setText(R.string.url_dialog_continue_button);
+                continueButton.setOnClickListener(view -> {
+                    viewModel.incrementVisits(classification);
+                    ResultActivity.startResultActivity(ScannerActivity.this, result);
+                });
+            }
         });
     }
 
