@@ -106,7 +106,11 @@ public class TutorialActivity extends AppCompatActivity {
                 {
                         R.layout.tutorial_slide1,
                         R.layout.tutorial_slide2,
-                        R.layout.tutorial_slide3,}
+                        R.layout.tutorial_slide3,
+                        R.layout.url_tutorial_slide1,
+                        R.layout.url_tutorial_slide2,
+                        R.layout.url_tutorial_slide5,
+                }
 
         ;
 

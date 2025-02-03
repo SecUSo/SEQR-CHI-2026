@@ -370,6 +370,12 @@
     <string name="url_dialog_risk_explanation_blue_risk_part_2">\?\?\?\?</string>
     <string name="url_dialog_website_open_time">This website address can be opened in %ds</string>
     <string name="full_url_dialog_title">Full URL</string>
+    <string name="url_tutorial_slide_1_title">Tutorial [1/9]: Preliminary information</string>
+    <string name="url_tutorial_slide_1_content">The QR code scanner application assists you in determining whether ifs safe to visit the website address associated With a scanned QR code.\n\nImmediately after scanning the QR code, but before the website address is loaded into the browser or an application, the scanner presents a dialog window containing the domain of the website associated With the QR code.</string>
+    <string name="url_tutorial_slide_2_title">Tutorial [2/9]: Domain of the website address</string>
+    <string name="url_tutorial_slide_2_content">The dialog window only shows the domain, since the domain of the website address is the most critical part for identifying potential phishing attempts. The domain of the website address is the area right before the <b>third slash</b> separated <b>by a dot</b>.\n\nTo illustrate this, the domain of the website addresses, shown below, is emphasized accordingly:\n\nhttps://www.web.<b><font fgcolor='#45B0E1'>knownpage.com</font></b>/dshfgfgdf\n\nhttps://<b><font fgcolor='#45B0E1'>example.com.com</font></b>/shfgsdsa/safd</string>
+    <string name="url_tutorial_slide_5_title">Tutorial [5/9]: <font fgcolor='#388E3C'>Low risk dialog window</font></string>
+    <string name="url_tutorial_slide_5_content"><u>Demonstration</u>\n\nHere is an example of a dialog window where the QR code scanner app recognized the <b>knownpage.com</b> as part of the legitimate website lists:</string>
     <string-array name="pref_search_engine_values" translatable="false">
         <item>DUCK_DUCK_GO</item>
         <item>GOOGLE</item>
