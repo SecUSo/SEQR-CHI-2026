@@ -17,6 +17,7 @@ import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
 
+import com.google.common.net.InternetDomainName;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -30,8 +31,6 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.History
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -163,16 +162,16 @@ public class Utils {
         return host;
     }
 
-    public static Spannable getHostHighlightingURI(String uriString, Context context) {
+    public static String extractBaseDomainFromURI(String uriString) {
         String host = extractHostFromURI(uriString);
+        return InternetDomainName.from(host).topDomainUnderRegistrySuffix().toString();
+    }
 
-        Pattern pattern = Pattern.compile("([0-9a-zA-ZäöüÄÖÜß-]*\\.(co.uk|com.de|de.com|co.at|[a-zA-Z]{2,}))$");
+    public static Spannable getHostHighlightingURI(String uriString, Context context) {
+        String baseDomain = extractBaseDomainFromURI(uriString);
 
-        Matcher m = pattern.matcher(host);
-        if (m.find()) host = m.group(1);
-
-        int start = uriString.indexOf(host);
-        int end = start + host.length();
+        int start = uriString.indexOf(baseDomain);
+        int end = start + baseDomain.length();
 
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();

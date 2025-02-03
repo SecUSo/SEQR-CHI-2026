@@ -37,8 +37,8 @@ class HostClassification(val uri: String, val case: Case) {
     }
 
     companion object {
-        val HOSTS_LIST = setOf("example.com", "kit.edu")
-        val BLUE_CASE_VISITS_REQUIRED = 3
-        val GRAY_CASE_WAITING_TIME = 20_000 //Time in millis
+        val HOSTS_LIST = setOf("example.com", "kit.edu", "knownpage.com")
+        val BLUE_CASE_VISITS_REQUIRED = 1
+        val GRAY_CASE_WAITING_TIME = 3_000 //Time in millis
     }
 }

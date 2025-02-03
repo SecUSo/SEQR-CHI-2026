@@ -156,7 +156,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         // Set the dialog to be shown when clicking on the info button
         Button domainTextView = findViewById(R.id.url_dialog_domain);
-        domainTextView.setText(Utils.extractHostFromURI(classification.getUri().toLowerCase()));
+        domainTextView.setText(Utils.extractBaseDomainFromURI(classification.getUri().toLowerCase()));
         domainTextView.setOnClickListener(view -> {
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                     .setMessage(Utils.getHostHighlightingURI(classification.getUri(), view.getContext()))

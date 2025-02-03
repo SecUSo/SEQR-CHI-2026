@@ -194,12 +194,12 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
 
     fun initURLDialog(uri: String) {
         viewModelScope.launch {
-            val host = Utils.extractHostFromURI(uri)
+            val baseDomain = Utils.extractBaseDomainFromURI(uri)
             val classification =
-                if (HOSTS_LIST.contains(host.lowercase())) {
+                if (HOSTS_LIST.contains(baseDomain.lowercase())) {
                     HostClassification.Case.GREEN
-                } else if (hostsDatabase.hostDao().getHost(host) != null
-                    && hostsDatabase.hostDao().getHost(host)!!.visits >= BLUE_CASE_VISITS_REQUIRED
+                } else if (hostsDatabase.hostDao().getHost(baseDomain) != null
+                    && hostsDatabase.hostDao().getHost(baseDomain)!!.visits >= BLUE_CASE_VISITS_REQUIRED
                 ) {
                     HostClassification.Case.BLUE
                 } else {
@@ -214,13 +214,13 @@ class ScannerViewModel(application: Application) : AndroidViewModel(application)
             return
         }
         viewModelScope.launch {
-            val host = Utils.extractHostFromURI(classification.uri)
+            val baseDomain = Utils.extractBaseDomainFromURI(classification.uri)
             if (classification.case == HostClassification.Case.GRAY || classification.case == HostClassification.Case.BLUE) {
-                var hostEntity = hostsDatabase.hostDao().getHost(host)
+                var hostEntity = hostsDatabase.hostDao().getHost(baseDomain)
                 if (hostEntity == null) {
-                    hostEntity = HostEntity(0, host, 0)
+                    hostEntity = HostEntity(0, baseDomain, 0)
                     hostsDatabase.hostDao().insert(hostEntity)
-                    hostEntity = hostsDatabase.hostDao().getHost(host)
+                    hostEntity = hostsDatabase.hostDao().getHost(baseDomain)
                 }
                 hostsDatabase.hostDao().incrementVisits(hostEntity!!.id)
             }
