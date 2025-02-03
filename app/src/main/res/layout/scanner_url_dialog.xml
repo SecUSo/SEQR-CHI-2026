@@ -36,7 +36,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/border_rounded"
-            app:tint="@color/green" />
+            app:tint="?attr/colorHostClassificationGray" />
 
         <TextView
             android:id="@+id/url_dialog_risk_explanation_part_1"
@@ -45,47 +45,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="32dp"
-            android:text="@string/url_dialog_risk_explanation_low_risk_part_1"
+            android:text="@string/url_dialog_risk_explanation_unknown_risk_part_1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <!--<TextView
-            android:id="@+id/url_dialog_domain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
-            android:letterSpacing="0.15"
-            android:text="knownpage.com"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/url_dialog_risk_explanation_part_1" />
-
-        <Button
-            android:id="@+id/url_dialog_domain_info_button"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="-12dp"
-            android:layout_marginEnd="-6dp"
-            android:visibility="gone"
-            android:background="@drawable/ic_info_black_24dp"
-            android:backgroundTint="@color/lightgrey"
-            app:icon="@drawable/ic_info_black_24dp"
-            app:layout_constraintBottom_toBottomOf="@id/url_dialog_domain"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/url_dialog_domain"
-            app:layout_constraintTop_toTopOf="@id/url_dialog_domain" />-->
 
         <Button
             android:id="@+id/url_dialog_domain"
@@ -97,13 +61,13 @@
             android:background="@color/transparent"
             android:drawableEnd="@drawable/ic_info_black_24dp"
             android:letterSpacing="0.15"
-            android:text="knownpage.com"
             android:padding="0dp"
+            android:text="example.com"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
             app:layout_constrainedWidth="true"
 
             app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +82,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/url_dialog_risk_explanation_low_risk_part_2"
+            android:text="@string/url_dialog_risk_explanation_unknown_risk_part_2"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -133,7 +97,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="?attr/colorHostClassificationGray"
             android:text="@string/url_dialog_continue_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
