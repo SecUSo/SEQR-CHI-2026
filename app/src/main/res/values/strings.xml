@@ -366,8 +366,8 @@
     <string name="url_dialog_risk_explanation_low_risk_part_2">is well established.</string>
     <string name="url_dialog_risk_explanation_unknown_risk_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
     <string name="url_dialog_risk_explanation_unknown_risk_part_2">before opening the website address.</string>
-    <string name="url_dialog_risk_explanation_blue_risk_part_1"><b>\?\?\? Risk:</b> \?\?\?\?</string>
-    <string name="url_dialog_risk_explanation_blue_risk_part_2">\?\?\?\?</string>
+    <string name="url_dialog_risk_explanation_blue_risk_part_1"><b>Low risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk because of your previous statements regarding</string>
+    <string name="url_dialog_risk_explanation_blue_risk_part_2">which you have noted as trustworthy.</string>
     <string name="url_dialog_website_open_time">This website address can be opened in %ds</string>
     <string name="full_url_dialog_title">Full URL</string>
     <string name="url_tutorial_slide_1_title">Tutorial [1/9]: Preliminary information</string>

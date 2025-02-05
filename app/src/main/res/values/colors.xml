@@ -20,6 +20,10 @@
 
     <color name="highlight_transparent_light">#0DFFFFFF</color>
     <color name="highlight_transparent_dark">#0D000000</color>
+    
+    <color name="url_classification_blue_case">#1a509d</color>
+    <color name="url_classification_grey_case">#bfb9b9</color>
+    <color name="url_classification_green_case">#008000</color>
 
     <!-- dots inactive colors -->
     <color name="dot_dark_screen">#026499</color>
