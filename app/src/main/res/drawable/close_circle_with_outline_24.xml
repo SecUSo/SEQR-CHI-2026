@@ -6,7 +6,7 @@
     android:viewportHeight="24">
 
     <path android:fillColor="@color/green"
-        android:pathData="M0,12a1,1 0 1,1 24,0a1,1 0 1,1 -24,0h0.5a1,1 0 1,0 23,0a1,1 0 1,0 -23,0"/>
+        android:pathData="M0,12a1,1 0 1,1 24,0a1,1 0 1,1 -24,0h1.0a1,1 0 1,0 22,0a1,1 0 1,0 -22,0"/>
 
     <group
         android:pivotX="12"
@@ -14,7 +14,7 @@
         android:rotation="45">
         <path android:fillColor="@color/red"
 
-            android:pathData="M5,11.75hv0.5h6.75v6.75h0.5v-6.75h6.75v-0.5h-6.75v-6.75h-0.5v6.75"/>
+            android:pathData="M5,11.5hv1.0h6.75v6.5h1.0v-6.5h6.5v-1.0h-6.5v-6.5h-1.0v6.5"/>
     </group>
 
 </vector>

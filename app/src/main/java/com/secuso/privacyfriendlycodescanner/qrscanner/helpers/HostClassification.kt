@@ -1,30 +1,32 @@
 package com.secuso.privacyfriendlycodescanner.qrscanner.helpers
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.util.TypedValue
+import androidx.core.content.ContextCompat
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
 
 class HostClassification(val uri: String, val case: Case) {
     enum class Case {
         GREEN, BLUE, GRAY;
 
-        fun getColor(context: Context): Int {
+        fun getColorStateList(context: Context): ColorStateList {
             val typedValue = TypedValue()
             val theme = context.theme
             return when (this) {
                 GREEN -> {
                     theme.resolveAttribute(R.attr.colorHostClassificationGreen, typedValue, true)
-                    typedValue.data
+                    ColorStateList(arrayOf<IntArray>(intArrayOf(android.R.attr.state_enabled)), intArrayOf(typedValue.data))
                 }
 
                 BLUE -> {
                     theme.resolveAttribute(R.attr.colorHostClassificationBlue, typedValue, true)
-                    typedValue.data
+                    ColorStateList(arrayOf<IntArray>(intArrayOf(android.R.attr.state_enabled)), intArrayOf(typedValue.data))
                 }
 
                 GRAY -> {
                     theme.resolveAttribute(R.attr.colorHostClassificationGray, typedValue, true)
-                    typedValue.data
+                    ContextCompat.getColorStateList(context, typedValue.resourceId)!!
                 }
             }
         }

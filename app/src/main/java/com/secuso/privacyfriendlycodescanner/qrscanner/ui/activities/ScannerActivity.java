@@ -146,7 +146,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         urlDialog.setVisibility(View.VISIBLE);
 
         // Set the color based on the classification
-        ColorStateList colorStateList = new ColorStateList(new int[][]{new int[]{android.R.attr.state_enabled}}, new int[]{classification.getCase().getColor(urlDialog.getContext())});
+        ColorStateList colorStateList = classification.getCase().getColorStateList(urlDialog.getContext());
         ((ImageView) findViewById(R.id.dialog_border)).setImageTintList(colorStateList);
         findViewById(R.id.url_dialog_continue_button).setBackgroundTintList(colorStateList);
 
@@ -186,12 +186,14 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
                 continueButton.setText(getString(R.string.url_dialog_website_open_time, timeRemaining));
                 continueButton.setOnClickListener(view -> {
                 });
+                continueButton.setEnabled(false);
             } else {
                 continueButton.setText(R.string.url_dialog_continue_button);
                 continueButton.setOnClickListener(view -> {
                     viewModel.incrementVisits(classification);
                     ResultActivity.startResultActivity(ScannerActivity.this, result);
                 });
+                continueButton.setEnabled(true);
             }
         });
     }
