@@ -127,6 +127,10 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         if (ResultParser.parseResult(result.getResult()).getType() == ParsedResultType.URI) {
             String uri = ((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI();
+            if (Utils.extractBaseDomainFromURI(uri) == null) {
+                ResultActivity.startResultActivity(ScannerActivity.this, result);
+                return;
+            }
             viewModel.initURLDialog(uri);
             viewModel.getClassification().observe(this, hostClassification -> {
                 if (hostClassification != null) {

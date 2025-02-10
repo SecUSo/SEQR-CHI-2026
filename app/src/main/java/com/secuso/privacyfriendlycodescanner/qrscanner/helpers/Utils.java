@@ -13,6 +13,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.util.TypedValue;
 
 import androidx.annotation.DrawableRes;
@@ -36,6 +37,7 @@ public class Utils {
 
     public static final int DEFAULT_CODE_WIDTH = 100;
     public static final int DEFAULT_CODE_HEIGHT = 100;
+    private static final String TAG = "helpers.Utils";
 
     private static BarcodeFormat getFormat(BarcodeFormat format) {
         switch (format) {
@@ -164,11 +166,19 @@ public class Utils {
 
     public static String extractBaseDomainFromURI(String uriString) {
         String host = extractHostFromURI(uriString);
-        return InternetDomainName.from(host).topDomainUnderRegistrySuffix().toString();
+        try {
+            return InternetDomainName.from(host).topDomainUnderRegistrySuffix().toString();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Log.d(TAG, "Could not parse URI " + uriString, e);
+        }
+        return null;
     }
 
     public static Spannable getHostHighlightingURI(String uriString, Context context) {
         String baseDomain = extractBaseDomainFromURI(uriString);
+        if (baseDomain == null) {
+            return new SpannableString(uriString);
+        }
 
         int start = uriString.indexOf(baseDomain);
         int end = start + baseDomain.length();
