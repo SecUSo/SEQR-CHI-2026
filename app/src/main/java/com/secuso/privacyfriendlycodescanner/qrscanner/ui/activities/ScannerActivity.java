@@ -2,13 +2,9 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -23,7 +19,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -149,58 +144,18 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
     private void showURLDialog(HostClassification classification, BarcodeResult result) {
         View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
+        urlDialogViewModel.setupURLDialogView(urlDialog, classification, this);
         urlDialog.setVisibility(View.VISIBLE);
-
-        // Set the color based on the classification
-        ColorStateList colorStateList = classification.getCase().getColorStateList(urlDialog.getContext());
-        ((ImageView) findViewById(R.id.dialog_border)).setImageTintList(colorStateList);
-        findViewById(R.id.url_dialog_continue_button).setBackgroundTintList(colorStateList);
-
-        // Set the texts based on the classification
-        ((TextView) findViewById(R.id.url_dialog_risk_explanation_part_1)).setText(classification.getCase().getTexts()[0]);
-        ((TextView) findViewById(R.id.url_dialog_risk_explanation_part_2)).setText(classification.getCase().getTexts()[1]);
-
-        // Set the dialog to be shown when clicking on the info button
-        Button domainTextView = findViewById(R.id.url_dialog_domain);
-        domainTextView.setText(Utils.extractBaseDomainFromURI(classification.getUri().toLowerCase()));
-        domainTextView.setOnClickListener(view -> {
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
-                    .setMessage(Utils.getHostHighlightingURI(classification.getUri(), view.getContext()))
-                    .setTitle(R.string.full_url_dialog_title)
-                    .setIcon(R.drawable.ic_baseline_public_24dp)
-                    .setCancelable(true)
-                    .setNegativeButton(R.string.okay, null);
-            builder.setPositiveButton(R.string.copy_to_clipboard, (dialog, which) -> {
-                ((ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Text", classification.getUri()));
-                Toast.makeText(this, R.string.content_copied, Toast.LENGTH_SHORT).show();
-            });
-            builder.show();
-        });
 
         // Initialize the timer for the continue button based on the classification
         urlDialogViewModel.initContinueButton(classification);
         urlDialogViewModel.getUrlDialogContinueButtonPeriodicTrigger().observe(this, unit -> {
-            if (!urlDialogViewModel.getUrlDialogContinueButtonTimer().isInitialized()) {
-                return;
-            }
-            long enableTime = urlDialogViewModel.getUrlDialogContinueButtonTimer().getValue();
-            int timeRemaining = (int) Math.ceil((enableTime - System.currentTimeMillis()) / 1000f);
-
-
             Button continueButton = findViewById(R.id.url_dialog_continue_button);
-            if (timeRemaining > 0) {
-                continueButton.setText(getString(R.string.url_dialog_website_open_time, timeRemaining));
-                continueButton.setOnClickListener(view -> {
-                });
-                continueButton.setEnabled(false);
-            } else {
-                continueButton.setText(R.string.url_dialog_continue_button);
-                continueButton.setOnClickListener(view -> {
-                    urlDialogViewModel.incrementVisits(classification);
-                    ResultActivity.startResultActivity(ScannerActivity.this, result);
-                });
-                continueButton.setEnabled(true);
-            }
+            urlDialogViewModel.updateURLDialogContinueButton(continueButton, v -> {
+                urlDialogViewModel.incrementVisits(classification);
+                ResultActivity.startResultActivity(this, result);
+            }, this);
+
         });
     }
 
