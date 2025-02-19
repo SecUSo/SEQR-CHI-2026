@@ -53,6 +53,7 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassificatio
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.BaseActivity;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.ScannerViewModel;
+import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.URLDialogViewModel;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
@@ -80,6 +81,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
     private BeepManager beepManager;
 
     private ScannerViewModel viewModel;
+    private URLDialogViewModel urlDialogViewModel;
     private ScaleGestureDetector scaleGestureDetector;
 
     private final CameraPreview.StateListener stateListener = new CameraPreview.StateListener() {
@@ -131,8 +133,8 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
                 ResultActivity.startResultActivity(ScannerActivity.this, result);
                 return;
             }
-            viewModel.initURLDialog(uri);
-            viewModel.getClassification().observe(this, hostClassification -> {
+            urlDialogViewModel.initURLDialog(uri);
+            urlDialogViewModel.getClassification().observe(this, hostClassification -> {
                 if (hostClassification != null) {
                     showURLDialog(hostClassification, result);
                 }
@@ -176,12 +178,12 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         });
 
         // Initialize the timer for the continue button based on the classification
-        viewModel.initContinueButton(classification);
-        viewModel.getUrlDialogContinueButtonPeriodicTrigger().observe(this, unit -> {
-            if (!viewModel.getUrlDialogContinueButtonTimer().isInitialized()) {
+        urlDialogViewModel.initContinueButton(classification);
+        urlDialogViewModel.getUrlDialogContinueButtonPeriodicTrigger().observe(this, unit -> {
+            if (!urlDialogViewModel.getUrlDialogContinueButtonTimer().isInitialized()) {
                 return;
             }
-            long enableTime = viewModel.getUrlDialogContinueButtonTimer().getValue();
+            long enableTime = urlDialogViewModel.getUrlDialogContinueButtonTimer().getValue();
             int timeRemaining = (int) Math.ceil((enableTime - System.currentTimeMillis()) / 1000f);
 
 
@@ -194,7 +196,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             } else {
                 continueButton.setText(R.string.url_dialog_continue_button);
                 continueButton.setOnClickListener(view -> {
-                    viewModel.incrementVisits(classification);
+                    urlDialogViewModel.incrementVisits(classification);
                     ResultActivity.startResultActivity(ScannerActivity.this, result);
                 });
                 continueButton.setEnabled(true);
@@ -224,6 +226,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         beepManager = new BeepManager(this);
 
+        urlDialogViewModel = new ViewModelProvider(this).get(URLDialogViewModel.class);
         viewModel = new ViewModelProvider(this).get(ScannerViewModel.class);
         viewModel.isProcessingScan().observe(this, processing -> {
             View progressView = findViewById(R.id.image_processing_progress);
