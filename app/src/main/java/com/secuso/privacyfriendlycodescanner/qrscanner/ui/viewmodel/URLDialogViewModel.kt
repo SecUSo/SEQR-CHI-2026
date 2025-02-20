@@ -20,9 +20,6 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.R
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.HostsDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.HostEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.BLUE_CASE_VISITS_REQUIRED
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.GRAY_CASE_WAITING_TIME
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification.Companion.HOSTS_LIST
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,12 +28,6 @@ import kotlin.math.ceil
 
 class URLDialogViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _classification = MutableLiveData<HostClassification?>()
-    val classification: LiveData<HostClassification?>
-        get() = _classification
-
-    private val _urlDialogContinueButtonTimer = MutableLiveData<Long>()
-
     /**
      * Timestamp after which the button should be active
      */
@@ -44,12 +35,41 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         get() = _urlDialogContinueButtonTimer
     val urlDialogContinueButtonPeriodicTrigger = MutableLiveData<Unit>()
 
+    companion object {
+        const val BLUE_CASE_VISITS_REQUIRED = 1
+        const val GRAY_CASE_WAITING_TIME = 3_000 //Time in millis
+    }
+
+    private val _classification = MutableLiveData<HostClassification?>()
+    val classification: LiveData<HostClassification?>
+        get() = _classification
+
+    private val _urlDialogContinueButtonTimer = MutableLiveData<Long>()
     private val hostsDatabase = HostsDatabase.getDatabase(application)
+    private val context by lazy { application.applicationContext }
+
+    private var _trustedHostsList: Set<String> = setOf()
+
+    private suspend fun trustedHostsList(): Set<String> {
+        if (_trustedHostsList.isEmpty()) {
+            _trustedHostsList = readHostsFromRaw()
+        }
+        return _trustedHostsList
+    }
+
+    private suspend fun readHostsFromRaw(): Set<String> {
+        return context.resources.openRawResource(R.raw.trusted_hosts)
+            .bufferedReader()
+            .readLines()
+            .filter { !it.startsWith("#") }
+            .toSet()
+    }
+
     fun initURLDialog(uri: String) {
         viewModelScope.launch {
             val baseDomain = Utils.extractBaseDomainFromURI(uri)
             val classification =
-                if (HOSTS_LIST.contains(baseDomain.lowercase())) {
+                if (trustedHostsList().contains(baseDomain.lowercase())) {
                     HostClassification.Case.GREEN
                 } else if (hostsDatabase.hostDao().getHost(baseDomain) != null
                     && hostsDatabase.hostDao().getHost(baseDomain)!!.visits >= BLUE_CASE_VISITS_REQUIRED

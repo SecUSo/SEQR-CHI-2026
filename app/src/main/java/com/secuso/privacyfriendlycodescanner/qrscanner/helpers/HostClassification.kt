@@ -45,10 +45,4 @@ class HostClassification(val uri: String, val case: Case) {
             GRAY -> arrayOf(R.string.url_dialog_risk_explanation_unknown_risk_part_1, R.string.url_dialog_risk_explanation_unknown_risk_part_2)
         }
     }
-
-    companion object {
-        val HOSTS_LIST = setOf("example.com", "kit.edu", "knownpage.com")
-        val BLUE_CASE_VISITS_REQUIRED = 1
-        val GRAY_CASE_WAITING_TIME = 3_000 //Time in millis
-    }
 }
