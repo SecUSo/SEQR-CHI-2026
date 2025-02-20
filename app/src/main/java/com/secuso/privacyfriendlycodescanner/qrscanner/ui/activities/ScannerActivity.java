@@ -1,5 +1,7 @@
 package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities;
 
+import static com.secuso.privacyfriendlycodescanner.qrscanner.ui.resultfragments.URLResultFragment.VALID_RFC3986_PROTOCOL_SCHEME;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -153,10 +155,21 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             Button continueButton = findViewById(R.id.url_dialog_continue_button);
             urlDialogViewModel.updateURLDialogContinueButton(continueButton, v -> {
                 urlDialogViewModel.incrementVisits(classification);
-                ResultActivity.startResultActivity(this, result);
+                openUrl(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI());
             }, this);
 
         });
+    }
+
+    private void openUrl(String qrurl) {
+        String urlForIntentData = qrurl;
+        if (!qrurl.matches(VALID_RFC3986_PROTOCOL_SCHEME)) {
+            urlForIntentData = "http://" + qrurl;
+        }
+        Intent url = new Intent(Intent.ACTION_VIEW);/// !!!!
+        url.setData(Uri.parse(urlForIntentData).normalizeScheme());
+        String caption = getResources().getStringArray(R.array.url_array)[0];
+        startActivity(Intent.createChooser(url, caption));
     }
 
     @Override
