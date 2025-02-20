@@ -99,10 +99,10 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun setupURLDialogView(urlDialog: View, classification: HostClassification, activity: Activity) {
         // Set the color based on the classification
-        val colorStateList: ColorStateList = classification.case.getColorStateList(urlDialog.getContext())
+        val colorStateList: ColorStateList = classification.case.getColorStateList(urlDialog.context)
         (urlDialog.findViewById<View>(R.id.dialog_border) as ImageView).imageTintList = colorStateList
         urlDialog.findViewById<View>(R.id.url_dialog_continue_button).setBackgroundTintList(colorStateList)
-
+        (urlDialog.findViewById<View>(R.id.url_dialog_continue_button) as Button).setTextColor(classification.case.getButtonTextColorStateList(urlDialog.context))
 
         // Set the texts based on the classification
         (urlDialog.findViewById<View>(R.id.url_dialog_risk_explanation_part_1) as TextView).setText(classification.case.getTexts().get(0))

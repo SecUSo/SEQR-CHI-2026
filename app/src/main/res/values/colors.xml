@@ -25,6 +25,8 @@
     <color name="url_classification_grey_case_enabled">#bfb9b9</color>
     <color name="url_classification_grey_case_disabled">#e5e3e3</color>
     <color name="url_classification_grey_case_text_disabled">#4d4d4d</color>
+    <color name="url_classification_blue_case_text_disabled">#adadad</color>
+    <color name="url_classification_green_case_text_disabled">#adadad</color>
     <color name="url_classification_green_case">#008000</color>
 
     <!-- dots inactive colors -->

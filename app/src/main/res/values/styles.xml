@@ -63,7 +63,7 @@
         <item name="backgroundTint">@color/url_classification_grey_case</item>
         <item name="textAllCaps">false</item>
         <item name="android:textAlignment">textStart</item>
-        <item name="android:textColor">@color/url_classification_button_text</item>
+        <item name="android:textColor">@color/url_classification_grey_case_button_text</item>
     </style>
 
     <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.MaterialComponents.Button.OutlinedButton">

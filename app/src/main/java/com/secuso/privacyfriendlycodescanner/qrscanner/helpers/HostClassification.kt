@@ -31,6 +31,14 @@ class HostClassification(val uri: String, val case: Case) {
             }
         }
 
+        fun getButtonTextColorStateList(context: Context): ColorStateList {
+            return when (this) {
+                GREEN -> ContextCompat.getColorStateList(context, R.color.url_classification_green_case_button_text)!!
+                BLUE -> ContextCompat.getColorStateList(context, R.color.url_classification_blue_case_button_text)!!
+                GRAY -> ContextCompat.getColorStateList(context, R.color.url_classification_grey_case_button_text)!!
+            }
+        }
+
         fun getTexts(): Array<Int> = when (this) {
             GREEN -> arrayOf(R.string.url_dialog_risk_explanation_low_risk_part_1, R.string.url_dialog_risk_explanation_low_risk_part_2)
             BLUE -> arrayOf(R.string.url_dialog_risk_explanation_blue_risk_part_1, R.string.url_dialog_risk_explanation_blue_risk_part_2)
