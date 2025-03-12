@@ -11,6 +11,7 @@
         <attr name="colorNavbarHeaderText" format="color" />
         <attr name="colorURLHighlight" format="color" />
         <attr name="colorItemSelected" format="color" />
+        <attr name="secusoLogoDrawable" format="reference"/>
         <attr name="colorHostClassificationGreen" format="color" />
         <attr name="colorHostClassificationBlue" format="color" />
         <attr name="colorHostClassificationGray" format="color" />
