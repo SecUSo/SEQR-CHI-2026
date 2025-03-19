@@ -43,7 +43,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/url_tutorial_slide_2_title"
+            android:text="@string/url_tutorial_slide_6_title"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/textViewContent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/url_tutorial_slide_2_content"
+            android:text="@string/url_tutorial_slide_6_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

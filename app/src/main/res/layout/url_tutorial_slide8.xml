@@ -43,7 +43,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/url_tutorial_slide_2_title"
+            android:text="@string/url_tutorial_slide_8_title"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/textViewContent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,10 +58,27 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/url_tutorial_slide_2_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/url_tutorial_slide_8_content"
+            app:layout_constraintBottom_toTopOf="@id/dialog_example"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ScannerUrlDialogWrapper
+            android:id="@+id/dialog_example"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            app:dialogColor="?attr/colorHostClassificationGray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:textPart1="@string/url_dialog_risk_explanation_unknown_risk_part_1"
+            app:textPart2="@string/url_dialog_risk_explanation_unknown_risk_part_2"
+            app:textUrl="example.com">
+
+            <include layout="@layout/scanner_url_dialog" />
+        </com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ScannerUrlDialogWrapper>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
