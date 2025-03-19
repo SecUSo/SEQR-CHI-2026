@@ -24,12 +24,16 @@ class ScannerUrlDialogWrapper(context: Context, attrs: AttributeSet?) : FrameLay
     private val textUrl: String?
     private val dialogColor: ColorStateList?
 
+    private val continueButtonTextColor: ColorStateList?
+
     init {
         val array = context.theme.obtainStyledAttributes(attrs, R.styleable.ScannerUrlDialogWrapper, 0, 0)
 
         textPart1 = array.getResourceId(R.styleable.ScannerUrlDialogWrapper_textPart1, 0)
         textPart2 = array.getResourceId(R.styleable.ScannerUrlDialogWrapper_textPart2, 0)
         textUrl = array.getString(R.styleable.ScannerUrlDialogWrapper_textUrl)
+
+        continueButtonTextColor = array.getColorStateList(R.styleable.ScannerUrlDialogWrapper_continueButtonTextColor)
 
         val color = array.getColor(R.styleable.ScannerUrlDialogWrapper_dialogColor, 0)
         dialogColor = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_enabled)), intArrayOf(color))
@@ -46,5 +50,7 @@ class ScannerUrlDialogWrapper(context: Context, attrs: AttributeSet?) : FrameLay
 
         (findViewById<View>(R.id.dialog_border) as ImageView).imageTintList = dialogColor
         findViewById<View>(R.id.url_dialog_continue_button).backgroundTintList = dialogColor
+
+        findViewById<Button>(R.id.url_dialog_continue_button).setTextColor(continueButtonTextColor)
     }
 }

@@ -11,7 +11,7 @@
         <attr name="colorNavbarHeaderText" format="color" />
         <attr name="colorURLHighlight" format="color" />
         <attr name="colorItemSelected" format="color" />
-        <attr name="secusoLogoDrawable" format="reference"/>
+        <attr name="secusoLogoDrawable" format="reference" />
         <attr name="colorHostClassificationGreen" format="color" />
         <attr name="colorHostClassificationBlue" format="color" />
         <attr name="colorHostClassificationGray" format="color" />
@@ -24,5 +24,6 @@
         <attr name="textPart2" format="reference" />
         <attr name="textUrl" format="string" />
         <attr name="dialogColor" format="color" />
+        <attr name="continueButtonTextColor" format="color" />
     </declare-styleable>
 </resources>
