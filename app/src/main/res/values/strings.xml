@@ -24,9 +24,9 @@
     <string name="slide1_heading">Welcome</string>
     <string name="slide1_text">Welcome to Privacy friendly QR scanner. This tutorial will cover the most important things you need to know.</string>
     <string name="slide2_heading">What are the features?</string>
-    <string name="text_slide2">With this app you can both scan and create QR codes.</string>
-    <string name="slide3_heading">More features</string>
-    <string name="text_slide3">The QR code you scanned can be saved in History. Furthermore you can share it or copy it.</string>
+    <string name="text_slide2">This app allows you to both scan and create QR codes. Scanned QR codes are saved in the history, and you can easily share or copy them.</string>
+    <string name="slide3_heading">Further info about QR code scanning</string>
+    <string name="text_slide3">To help protect you from phishing, this app supports you while scanning QR codes that lead to websites. For effective protection, please read the following information on how the app assists you and what you should check yourself.</string>
     <string name="wecome">Welcome</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>

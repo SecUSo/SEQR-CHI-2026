@@ -8,15 +8,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center_horizontal"
         android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
             android:text="@string/wecome"
+            android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="30dp"
             android:textStyle="bold" />
@@ -30,11 +33,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:gravity="center"
             android:paddingLeft="40dp"
             android:paddingRight="40dp"
             android:text="@string/slide1_text"
             android:textAlignment="center"
-            android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
 
