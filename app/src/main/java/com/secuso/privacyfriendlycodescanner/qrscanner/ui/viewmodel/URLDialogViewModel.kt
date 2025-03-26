@@ -66,6 +66,7 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun initURLDialog(uri: String) {
+        _classification.value = null
         viewModelScope.launch {
             val baseDomain = Utils.extractBaseDomainFromURI(uri)
             val classification =

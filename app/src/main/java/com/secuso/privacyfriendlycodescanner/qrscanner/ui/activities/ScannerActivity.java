@@ -148,6 +148,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
                 ResultActivity.startResultActivity(ScannerActivity.this, result);
                 return;
             }
+            urlDialogViewModel.getClassification().removeObservers(this);
             urlDialogViewModel.initURLDialog(uri);
             urlDialogViewModel.getClassification().observe(this, hostClassification -> {
                 if (hostClassification != null) {
@@ -168,6 +169,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         urlDialog.setVisibility(View.VISIBLE);
 
         // Initialize the timer for the continue button based on the classification
+        urlDialogViewModel.getUrlDialogContinueButtonPeriodicTrigger().removeObservers(this);
         urlDialogViewModel.initContinueButton(classification);
         urlDialogViewModel.getUrlDialogContinueButtonPeriodicTrigger().observe(this, unit -> {
             Button continueButton = findViewById(R.id.url_dialog_continue_button);
