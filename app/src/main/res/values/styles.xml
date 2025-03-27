@@ -19,7 +19,6 @@
         <item name="colorURLHighlight">@color/black</item>
         <item name="secusoLogoDrawable">@drawable/secuso_logo_black</item>
         <item name="colorHostClassificationGrey">@color/url_classification_grey_case</item>
-        <item name="colorHostClassificationBlue">@color/url_classification_blue_case</item>
         <item name="colorHostClassificationGreen">@color/url_classification_green_case</item>
         <item name="colorURLDialogBackground">@color/white</item>
         <item name="colorURLDialogIcon">@color/black</item>

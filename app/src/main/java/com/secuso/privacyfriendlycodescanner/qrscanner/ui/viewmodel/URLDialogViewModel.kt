@@ -46,7 +46,6 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificatio
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.TrustedDomainEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.URLEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.BLUE
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.GREEN
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.GREY
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Hint.KNOWN_DOMAIN
@@ -229,7 +228,7 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         }
         viewModelScope.launch {
             val url = classification.uri
-            if (classification.case == GREY || classification.case == BLUE) {
+            if (classification.case == GREY) {
                 var dbEntry = urlClassificationDatabase.urlDao().findByURL(url)
                 if (dbEntry == null) {
                     dbEntry = URLEntity(0, url, classification.baseDomain, 0)
@@ -243,7 +242,6 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun initContinueButton(classification: URLClassification) {
         if (classification.case == GREEN
-            || classification.case == BLUE
         ) {
             _urlDialogContinueButtonTimer.value = System.currentTimeMillis()
         } else {

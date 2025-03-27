@@ -29,7 +29,7 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
     val hints = HashSet<Hint>()
 
     enum class Case {
-        GREEN, BLUE, GREY;
+        GREEN, GREY;
 
         fun getColorStateList(context: Context): ColorStateList {
             val typedValue = TypedValue()
@@ -37,11 +37,6 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
             return when (this) {
                 GREEN -> {
                     theme.resolveAttribute(R.attr.colorHostClassificationGreen, typedValue, true)
-                    ColorStateList(arrayOf<IntArray>(intArrayOf(android.R.attr.state_enabled)), intArrayOf(typedValue.data))
-                }
-
-                BLUE -> {
-                    theme.resolveAttribute(R.attr.colorHostClassificationBlue, typedValue, true)
                     ColorStateList(arrayOf<IntArray>(intArrayOf(android.R.attr.state_enabled)), intArrayOf(typedValue.data))
                 }
 
@@ -55,14 +50,12 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
         fun getButtonTextColorStateList(context: Context): ColorStateList {
             return when (this) {
                 GREEN -> ContextCompat.getColorStateList(context, R.color.url_classification_green_case_button_text)!!
-                BLUE -> ContextCompat.getColorStateList(context, R.color.url_classification_blue_case_button_text)!!
                 GREY -> ContextCompat.getColorStateList(context, R.color.url_classification_grey_case_button_text)!!
             }
         }
 
         fun getTexts(): Array<Int> = when (this) {
             GREEN -> arrayOf(R.string.url_dialog_risk_explanation_low_risk_part_1, R.string.url_dialog_risk_explanation_low_risk_part_2)
-            BLUE -> arrayOf(R.string.url_dialog_risk_explanation_blue_risk_part_1, R.string.url_dialog_risk_explanation_blue_risk_part_2)
             GREY -> arrayOf(R.string.url_dialog_risk_explanation_unknown_risk_part_1, R.string.url_dialog_risk_explanation_unknown_risk_part_2)
         }
     }
