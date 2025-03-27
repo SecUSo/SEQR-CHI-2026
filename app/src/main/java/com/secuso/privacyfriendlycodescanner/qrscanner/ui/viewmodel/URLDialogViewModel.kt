@@ -47,8 +47,8 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.Trusted
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.URLEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.BLUE
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.GREY
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.GREEN
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Case.GREY
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Hint.KNOWN_DOMAIN
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Hint.KNOWN_FILE_UPLOAD_HOST
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification.Hint.NONE
@@ -71,10 +71,6 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
     val urlDialogContinueButtonTimer: LiveData<Long>
         get() = _urlDialogContinueButtonTimer
     val urlDialogContinueButtonPeriodicTrigger = MutableLiveData<Unit>()
-
-    companion object {
-        const val GRAY_CASE_WAITING_TIME = 3_000 //Time in millis
-    }
 
     private val _classification = MutableLiveData<URLClassification?>()
     val classification: LiveData<URLClassification?>
@@ -103,27 +99,34 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         ) {
             hints.add(REDIRECT)
         }
+        // Check if the base domain is a known link shortener service
         if (URLClassification.getShortLinkDomains(this.context).contains(baseDomain)) {
             hints.add(SHORT_URL)
         }
+        // Check if the host is known file upload service
         if (URLClassification.getFileUploadHosts(this.context).contains(host)) {
             hints.add(KNOWN_FILE_UPLOAD_HOST)
         }
+        // Check if the base domain is a well known domain
         if (URLClassification.getKnownDomains(this.context).contains(baseDomain)) {
             hints.add(KNOWN_DOMAIN)
         }
+        // Check if the base domain is in the user-managed trusted domains database
         if (urlClassificationDatabase.trustedDomainDao().findByDomain(baseDomain) != null) {
             hints.add(TRUSTED_DOMAIN)
         }
+        // Check if the url was visited multiple times before
         if (urlClassificationDatabase.urlDao().findByURL(url) != null
             && urlClassificationDatabase.urlDao().findByURL(url)!!.visits >= URLClassification.getVisitsRequired(this.context)
         ) {
             hints.add(VISITED_URL)
         }
+        // Check if the base domain was visited multiple times before
         if (urlClassificationDatabase.urlDao().getTotalVisitsByBaseDomain(baseDomain) >= URLClassification.getVisitsRequired(this.context)
         ) {
             hints.add(VISITED_BASE_DOMAIN)
         }
+
         val classification = URLClassification(url, baseDomain, getFinalClassification(hints).first)
         classification.hints.addAll(hints)
         return classification
@@ -244,11 +247,13 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         ) {
             _urlDialogContinueButtonTimer.value = System.currentTimeMillis()
         } else {
-            _urlDialogContinueButtonTimer.value = System.currentTimeMillis() + GRAY_CASE_WAITING_TIME
+            _urlDialogContinueButtonTimer.value = System.currentTimeMillis() + URLClassification.getGreyCaseWaitingTime(context)
         }
         viewModelScope.launch {
             urlDialogContinueButtonPeriodicTrigger.postValue(Unit)
-            while ((_urlDialogContinueButtonTimer.value ?: (System.currentTimeMillis() + GRAY_CASE_WAITING_TIME)) > System.currentTimeMillis()) {
+            while ((_urlDialogContinueButtonTimer.value
+                    ?: (System.currentTimeMillis() + URLClassification.getGreyCaseWaitingTime(context))) > System.currentTimeMillis()
+            ) {
                 delay(100)
                 urlDialogContinueButtonPeriodicTrigger.postValue(Unit)
             }

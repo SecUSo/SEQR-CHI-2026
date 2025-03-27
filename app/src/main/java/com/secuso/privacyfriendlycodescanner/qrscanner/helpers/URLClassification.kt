@@ -157,5 +157,10 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
             return context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
                 .getInt(PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED, 3)
         }
+
+        fun getGreyCaseWaitingTime(context: Context): Int {
+            return context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
+                .getInt(PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME, 3_000)
+        }
     }
 }
