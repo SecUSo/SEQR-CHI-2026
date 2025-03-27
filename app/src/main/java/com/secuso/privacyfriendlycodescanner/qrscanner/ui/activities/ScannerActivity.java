@@ -64,7 +64,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.HostClassification;
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.BaseActivity;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.ScannerViewModel;
@@ -150,9 +150,9 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             }
             urlDialogViewModel.getClassification().removeObservers(this);
             urlDialogViewModel.initURLDialog(uri);
-            urlDialogViewModel.getClassification().observe(this, hostClassification -> {
-                if (hostClassification != null) {
-                    showURLDialog(hostClassification, result);
+            urlDialogViewModel.getClassification().observe(this, URLClassification -> {
+                if (URLClassification != null) {
+                    showURLDialog(URLClassification, result);
                 }
             });
         } else {
@@ -163,7 +163,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 //            startActivity(resultIntent);
     }
 
-    private void showURLDialog(HostClassification classification, BarcodeResult result) {
+    private void showURLDialog(URLClassification classification, BarcodeResult result) {
         View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
         urlDialogViewModel.setupURLDialogView(urlDialog, classification, this);
         urlDialog.setVisibility(View.VISIBLE);

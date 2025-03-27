@@ -369,6 +369,9 @@
     <string name="url_dialog_risk_explanation_blue_risk_part_1"><b>Low risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk because of your previous statements regarding</string>
     <string name="url_dialog_risk_explanation_blue_risk_part_2">which you have noted as trustworthy.</string>
     <string name="url_dialog_website_open_time">This website address can be opened in %ds</string>
+    <string name="url_dialog_add_to_trusted_domains">Add %s to trusted domains.</string>
+    <string name="url_dialog_add_to_trusted_domains_dialog_title">Add %s to trusted domains?</string>
+    <string name="url_dialog_add_to_trusted_domains_dialog_text">Are you sure, you want to add <b>%1$s</b> to trusted domains. This marks all further urls leading to this domain (<b>%1$s</b>) or a subdomain (e.g. <b>example.%1$s</b>) of it in green. So only do this if you are sure that you can trust urls leading to this domain and that it is for example not possible to upload malicious files to this domain that could result in a malicious url shared with you. You can always manage your trusted domains in the apps settings.</string>
     <string name="full_url_dialog_title">Full URL</string>
     <string name="url_tutorial_slide_1_title">Info [1/9]: Preliminary information</string>
     <string name="url_tutorial_slide_1_content">The QR code scanner application assists you in determining whether it\'s safe to visit the website address associated with a scanned QR code.\n\nImmediately after scanning the QR code, but before the website address is loaded into the browser or an application, the scanner presents a dialog window containing the domain of the website associated with the QR code.</string>

@@ -1,6 +1,6 @@
 /*
     Privacy Friendly QR Scanner
-    Copyright (C) 2023-2025 Privacy Friendly QR Scanner authors and SECUSO
+    Copyright (C) 2025 Privacy Friendly QR Scanner authors and SECUSO
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,15 +16,16 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package com.secuso.privacyfriendlycodescanner.qrscanner.helpers
+package com.secuso.privacyfriendlycodescanner.qrscanner.database.entities
 
-import android.content.Context
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-object PreferenceKeys {
-    const val SEARCH_ENGINE = "pref_search_engine"
-    const val APP_THEME = "pref_app_theme"
-    const val URL_CLASSIFICATION_MIN_VISITS_REQUIRED = "pref_url_classification_min_visits_required"
-    fun getDefaultSharedPreferencesName(context: Context): String {
-        return context.packageName + "_preferences"
-    }
-}
+@Entity(tableName = "visitedUrls")
+data class URLEntity(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val url: String,
+    val baseDomain: String,
+    val visits: Int
+)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -25,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/border_rounded"
-            app:tint="?attr/colorHostClassificationGray" />
+            app:tint="?attr/colorHostClassificationGrey" />
 
         <TextView
             android:id="@+id/url_dialog_risk_explanation_part_1"
@@ -73,6 +74,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/url_dialog_domain" />
 
+        <CheckBox
+            android:id="@+id/url_dialog_trust_domain_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/url_dialog_add_to_trusted_domains"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/url_dialog_risk_explanation_part_2"
+            tools:visibility="visible" />
+
         <Button
             android:id="@+id/url_dialog_continue_button"
             style="@style/AppTheme.URLDialog.OpenWebsiteButton"
@@ -86,7 +101,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/url_dialog_risk_explanation_part_2" />
+            app:layout_constraintTop_toBottomOf="@+id/url_dialog_trust_domain_checkbox" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -14,7 +14,7 @@
         <attr name="secusoLogoDrawable" format="reference" />
         <attr name="colorHostClassificationGreen" format="color" />
         <attr name="colorHostClassificationBlue" format="color" />
-        <attr name="colorHostClassificationGray" format="color" />
+        <attr name="colorHostClassificationGrey" format="color" />
         <attr name="colorURLDialogBackground" format="color" />
         <attr name="colorURLDialogIcon" format="color" />
     </declare-styleable>
