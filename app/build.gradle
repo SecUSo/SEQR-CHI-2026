@@ -24,6 +24,10 @@ android {
             }
         }
 
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas".toString())
+        }
+
         sourceSets {
             androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
         }
