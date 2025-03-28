@@ -27,12 +27,15 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.database.daos.URLDao
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.TrustedDomainEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.URLEntity
 
-@Database(entities = [URLEntity::class, TrustedDomainEntity::class], version = 1)
+@Database(entities = [URLEntity::class, TrustedDomainEntity::class], version = URLClassificationDatabase.VERSION)
 abstract class URLClassificationDatabase : RoomDatabase() {
     abstract fun urlDao(): URLDao
     abstract fun trustedDomainDao(): TrustedDomainDao
 
     companion object {
+        const val VERSION = 1
+        const val DB_NAME = "url_classification_database"
+
         @Volatile
         private var INSTANCE: URLClassificationDatabase? = null
 
@@ -41,7 +44,7 @@ abstract class URLClassificationDatabase : RoomDatabase() {
                 return INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     URLClassificationDatabase::class.java,
-                    "url_classification_database"
+                    DB_NAME
                 ).build().also { INSTANCE = it }
             }
         }

@@ -26,6 +26,7 @@ import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppDatabase
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificationDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys
 import org.secuso.privacyfriendlybackup.api.backup.DatabaseUtil.deleteRoomDatabase
 import org.secuso.privacyfriendlybackup.api.backup.DatabaseUtil.deleteTables
@@ -41,7 +42,8 @@ import kotlin.system.exitProcess
 class BackupRestorer : IBackupRestorer {
 
     @Throws(IOException::class)
-    private fun readDatabase(reader: JsonReader, context: Context) {
+    private fun <T : RoomDatabase> readDatabase(databaseClass: Class<T>, databaseName: String, reader: JsonReader, context: Context) {
+        Log.d(TAG, "Restoring database $databaseName")
         reader.beginObject()
         val n1: String = reader.nextName()
         if (n1 != "version") {
@@ -53,18 +55,18 @@ class BackupRestorer : IBackupRestorer {
             throw RuntimeException("Unknown value $n2")
         }
 
-        val restoreDatabaseName = "restoreDatabase"
+        val tempDatabaseName = "restoreDatabase"
 
         // delete if file already exists
-        val restoreDatabaseFile = context.getDatabasePath(restoreDatabaseName)
+        val restoreDatabaseFile = context.getDatabasePath(tempDatabaseName)
         if (restoreDatabaseFile.exists()) {
-            deleteRoomDatabase(context, restoreDatabaseName)
+            deleteRoomDatabase(context, tempDatabaseName)
         }
 
         // create new restore database
         val restoreDatabase: RoomDatabase = Room.databaseBuilder(
             context.applicationContext,
-            AppDatabase::class.java, restoreDatabaseName
+            databaseClass, tempDatabaseName
         ).build()
         val db = restoreDatabase.openHelper.writableDatabase
 
@@ -83,15 +85,15 @@ class BackupRestorer : IBackupRestorer {
         reader.endObject()
 
         // copy file to correct location
-        val actualDatabaseFile = context.getDatabasePath(AppDatabase.DB_NAME)
+        val actualDatabaseFile = context.getDatabasePath(databaseName)
 
-        deleteRoomDatabase(context, AppDatabase.DB_NAME)
+        deleteRoomDatabase(context, databaseName)
 
         copyFile(restoreDatabaseFile, actualDatabaseFile)
-        Log.d("PFA BackupRestorer", "Database Restored")
+        Log.d(TAG, "Database $databaseName restored.")
 
         // delete restore database
-        deleteRoomDatabase(context, restoreDatabaseName)
+        deleteRoomDatabase(context, tempDatabaseName)
     }
 
     @Throws(IOException::class)
@@ -105,6 +107,7 @@ class BackupRestorer : IBackupRestorer {
                     .putBoolean(name, reader.nextBoolean())
 
                 PreferenceKeys.SEARCH_ENGINE, PreferenceKeys.APP_THEME -> pref.putString(name, reader.nextString())
+                PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED, PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME -> pref.putInt(name, reader.nextInt())
                 else -> throw RuntimeException("Unknown preference $name")
             }
         }
@@ -122,7 +125,20 @@ class BackupRestorer : IBackupRestorer {
             while (reader.hasNext()) {
                 val type: String = reader.nextName()
                 when (type) {
-                    "database" -> readDatabase(reader, context)
+                    BackupCreator.backupDatabaseNameAppDatabase -> readDatabase(
+                        AppDatabase::class.java,
+                        AppDatabase.DB_NAME,
+                        reader,
+                        context
+                    )
+
+                    BackupCreator.backupDatabaseNameURLClassificationDatabase -> readDatabase(
+                        URLClassificationDatabase::class.java,
+                        URLClassificationDatabase.DB_NAME,
+                        reader,
+                        context
+                    )
+
                     "preferences" -> readPreferences(reader, context)
                     else -> throw RuntimeException("Can not parse type $type")
                 }
@@ -133,5 +149,9 @@ class BackupRestorer : IBackupRestorer {
             e.printStackTrace()
             false
         }
+    }
+
+    companion object {
+        private const val TAG = "PFA BackupRestorer"
     }
 }
