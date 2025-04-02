@@ -101,8 +101,31 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
          */
         NONE;
 
-        fun getTexts(): Array<String> = when (this) {
-            else -> arrayOf(this.name, this.name)
+        fun getTexts(): Array<Int> = when (this) {
+            REDIRECT -> arrayOf(R.string.url_dialog_risk_explanation_unknown_risk_redirect_part_1, R.string.url_dialog_risk_explanation_unknown_risk_redirect_part_2)
+
+            SHORT_URL -> arrayOf(R.string.url_dialog_risk_explanation_unknown_risk_short_url_part_1, R.string.url_dialog_risk_explanation_unknown_risk_short_url_part_2)
+
+            KNOWN_DOMAIN -> arrayOf(R.string.url_dialog_risk_explanation_low_risk_known_domain_part_1, R.string.url_dialog_risk_explanation_low_risk_known_domain_part_2)
+
+            KNOWN_FILE_UPLOAD_HOST -> arrayOf(
+                R.string.url_dialog_risk_explanation_unknown_risk_known_file_upload_host_part_1,
+                R.string.url_dialog_risk_explanation_unknown_risk_known_file_upload_host_part_2
+            )
+
+            TRUSTED_DOMAIN -> arrayOf(
+                R.string.url_dialog_risk_explanation_low_risk_trusted_domain_part_1,
+                R.string.url_dialog_risk_explanation_low_risk_trusted_domain_part_2
+            )
+
+            VISITED_URL -> arrayOf(R.string.url_dialog_risk_explanation_low_risk_visited_url_part_1, R.string.url_dialog_risk_explanation_low_risk_visited_url_part_2)
+
+            VISITED_BASE_DOMAIN -> arrayOf(
+                R.string.url_dialog_risk_explanation_unknown_risk_visited_base_domain_part_1,
+                R.string.url_dialog_risk_explanation_unknown_risk_visited_base_domain_part_2
+            )
+
+            NONE -> arrayOf(R.string.url_dialog_risk_explanation_unknown_risk_part_1, R.string.url_dialog_risk_explanation_unknown_risk_part_2)
         }
     }
 
