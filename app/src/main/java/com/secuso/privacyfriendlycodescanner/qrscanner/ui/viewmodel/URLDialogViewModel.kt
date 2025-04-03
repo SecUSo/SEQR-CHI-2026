@@ -245,12 +245,12 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         ) {
             _urlDialogContinueButtonTimer.value = System.currentTimeMillis()
         } else {
-            _urlDialogContinueButtonTimer.value = System.currentTimeMillis() + URLClassification.getGreyCaseWaitingTime(context)
+            _urlDialogContinueButtonTimer.value = System.currentTimeMillis() + URLClassification.getGreyCaseWaitingTimeMillis(context)
         }
         viewModelScope.launch {
             urlDialogContinueButtonPeriodicTrigger.postValue(Unit)
             while ((_urlDialogContinueButtonTimer.value
-                    ?: (System.currentTimeMillis() + URLClassification.getGreyCaseWaitingTime(context))) > System.currentTimeMillis()
+                    ?: (System.currentTimeMillis() + URLClassification.getGreyCaseWaitingTimeMillis(context))) > System.currentTimeMillis()
             ) {
                 delay(100)
                 urlDialogContinueButtonPeriodicTrigger.postValue(Unit)

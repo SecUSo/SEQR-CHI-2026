@@ -18,6 +18,7 @@
 
 package com.secuso.privacyfriendlycodescanner.qrscanner.database.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -34,6 +35,9 @@ interface URLDao {
 
     @Query("SELECT * FROM visitedUrls")
     suspend fun getAll(): List<URLEntity>
+
+    @Query("SELECT * FROM visitedUrls ORDER BY baseDomain,url")
+    fun getAllLiveData(): LiveData<List<URLEntity>>
 
     @Query("UPDATE visitedUrls SET visits = :visits WHERE id = :id")
     suspend fun updateVisits(id: Int, visits: Int)

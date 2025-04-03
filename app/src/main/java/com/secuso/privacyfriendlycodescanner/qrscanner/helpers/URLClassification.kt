@@ -133,6 +133,8 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
         private var _knownDomains: Set<String> = setOf()
         private var _shortLinkDomains: Set<String> = setOf()
         private var _fileUploadHosts: Set<String> = setOf()
+        private final val DEFAULT_NUM_VISITS_REQUIRED = 2
+        private final val DEFAULT_SECONDS_TO_WAIT = 3
 
         private fun readListFromRaw(context: Context, @RawRes resourceID: Int): Set<String> {
             return context.resources.openRawResource(resourceID)
@@ -170,13 +172,28 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
         }
 
         fun getVisitsRequired(context: Context): Int {
-            return context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
-                .getInt(PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED, 3)
+            val value: Int = try {
+                context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
+                    .getString(PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED, "2")?.toInt() ?: DEFAULT_NUM_VISITS_REQUIRED
+            } catch (e: NumberFormatException) {
+                DEFAULT_NUM_VISITS_REQUIRED
+            }
+            return value
         }
 
-        fun getGreyCaseWaitingTime(context: Context): Int {
+        fun getGreyCaseWaitingTimeMillis(context: Context): Int {
+            val value: Int = try {
+                context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
+                    .getString(PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME, "3")?.toInt() ?: DEFAULT_SECONDS_TO_WAIT
+            } catch (e: NumberFormatException) {
+                DEFAULT_SECONDS_TO_WAIT
+            }
+            return value * 1000
+        }
+
+        fun isUrlTrackingEnabled(context: Context): Boolean {
             return context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
-                .getInt(PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME, 3_000)
+                .getBoolean(PreferenceKeys.URL_CLASSIFICATION_URL_TRACKING_ENABLED, true)
         }
     }
 }

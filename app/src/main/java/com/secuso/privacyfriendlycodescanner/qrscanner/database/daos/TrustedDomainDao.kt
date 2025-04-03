@@ -18,6 +18,7 @@
 
 package com.secuso.privacyfriendlycodescanner.qrscanner.database.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -34,6 +35,9 @@ interface TrustedDomainDao {
 
     @Query("SELECT * FROM trustedDomains")
     suspend fun getAll(): List<TrustedDomainEntity>
+
+    @Query("SELECT * FROM trustedDomains ORDER BY baseDomain")
+    fun getAllLiveData(): LiveData<List<TrustedDomainEntity>>
 
     @Query("SELECT * FROM trustedDomains WHERE baseDomain = :baseDomain")
     suspend fun findByDomain(baseDomain: String): TrustedDomainEntity?

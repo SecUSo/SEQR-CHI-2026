@@ -17,20 +17,34 @@
 */
 package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities
 
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys
+import com.secuso.privacyfriendlycodescanner.qrscanner.ui.adapter.EditableListAdapter
+import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.SettingsViewModel
+
 
 class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
     class MainPreferenceFragment : PreferenceFragmentCompat() {
+        private lateinit var viewModel: SettingsViewModel
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            viewModel = ViewModelProvider(this)[SettingsViewModel::class.java];
             setPreferencesFromResource(R.xml.preferences, rootKey)
             bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SEARCH_ENGINE)!!)
             findPreference<Preference>(PreferenceKeys.APP_THEME)!!.onPreferenceChangeListener =
@@ -44,6 +58,56 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                     }
                     true
                 }
+            findPreference<Preference>("pref_url_classification_visited_urls")!!.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener { preference: Preference? ->
+                    createEditableListViewDialog(
+                        R.string.url_dialog_settings_edit_visited_urls_title,
+                        viewModel.urlEntities,
+                        { EditableListAdapter.Data(getString(R.string.url_dialog_settings_visited_url_info, it.url, it.visits), it.id) },
+                        { id -> viewModel.deleteURLEntity(id) },
+                        requireContext()
+                    ).show()
+                    true
+                }
+            findPreference<Preference>("pref_url_classification_trusted_domains")!!.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener { preference: Preference? ->
+                    createEditableListViewDialog(
+                        R.string.url_dialog_settings_edit_trusted_domains_title,
+                        viewModel.domainEntities,
+                        { EditableListAdapter.Data(it.baseDomain, it.id) },
+                        { id -> viewModel.deleteDomainEntity(id) },
+                        requireContext()
+                    ).show()
+                    true
+                }
+        }
+
+        private fun <T> createEditableListViewDialog(
+            @StringRes title: Int,
+            dataSource: LiveData<List<T>>,
+            converter: (T) -> EditableListAdapter.Data,
+            action: (id: Int) -> Unit,
+            context: Context
+        ): MaterialAlertDialogBuilder {
+            val simpleAdapter = EditableListAdapter(action)
+
+            val view = LayoutInflater.from(context).inflate(R.layout.dialog_editable_list, null, false)
+            view.findViewById<RecyclerView>(R.id.item_list).apply {
+                layoutManager = LinearLayoutManager(context)
+                val dividerItemDecoration = DividerItemDecoration(
+                    getContext(),
+                    (layoutManager as LinearLayoutManager).orientation
+                )
+                addItemDecoration(dividerItemDecoration)
+                adapter = simpleAdapter
+            }
+            dataSource.observe(this, { list -> simpleAdapter.updateData(list.map(converter)) })
+            val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
+                .setView(view)
+                .setTitle(title)
+                .setCancelable(false)
+                .setNegativeButton(R.string.close) { _, _ -> dataSource.removeObservers(this) }
+            return builder
         }
     }
 

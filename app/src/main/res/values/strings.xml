@@ -404,6 +404,21 @@
     <string name="url_tutorial_slide_8_content"><u>Demonstration 1:</u>\n\nHere is an example of a dialog window where the QR code scanner application did not find the <b>example.com</b> on the list of legitimate website addresses even when it’s a <b>legitimate</b> website because it is not one of the most visited websites.</string>
     <string name="url_tutorial_slide_9_title">Info [9/9]: <font fgcolor='#808080'>Unknown risk dialog window</font></string>
     <string name="url_tutorial_slide_9_content"><u>Demonstration 2:</u>\n\nHere is an example of a dialog window where the QR code scanner application did not find the <b>exampie.com</b> (notice the visual resemble of the letter “i” instead of “l") on the list of legitimate website addresses, and therefore shows the unknown risk type of dialog window. In this case the website is a <b>phishing</b> one which tries to make you believe it goes to example.com which is not the case.</string>
+    <string name="url_dialog_settings_title">URL dialog settings</string>
+    <string name="url_dialog_settings_summary">These settings configure the behavior of the dialog shown when you scan a qr code containing a url. See the tutorial for more information.</string>
+    <string name="url_dialog_settings_min_visits_required_title">Number of visits required</string>
+    <string name="url_dialog_settings_min_visits_required_summary">This value defines how often you have to open a specific url for the app to consider it as low risks.</string>
+    <string name="url_dialog_settings_waiting_time_title">Protection time</string>
+    <string name="url_dialog_settings_waiting_time_summary">Specifies how many seconds you have to wait before you can open a url with unknown risk.</string>
+    <string name="url_dialog_settings_visited_urls_title">Visited URLs history</string>
+    <string name="url_dialog_settings_visited_urls_summary">Here you can edit the list of urls you have already visited.</string>
+    <string name="url_dialog_settings_disable_tracking_visits_title">Track visited urls</string>
+    <string name="url_dialog_settings_disable_tracking_visits_summary">If you disable this setting the app will no longer track which urls were visited by you and can therefor not give you hints about the risk level of previously visited urls.</string>
+    <string name="url_dialog_settings_trusted_domains_title">Trusted domains</string>
+    <string name="url_dialog_settings_trusted_domains_summary">Here you can manage the domains you added to the trusted domains list.</string>
+    <string name="url_dialog_settings_edit_trusted_domains_title">Edit trusted domains</string>
+    <string name="url_dialog_settings_edit_visited_urls_title">Edit visited urls</string>
+    <string name="url_dialog_settings_visited_url_info">%s\nVisits: %d</string>
     <string-array name="pref_search_engine_values" translatable="false">
         <item>DUCK_DUCK_GO</item>
         <item>GOOGLE</item>
