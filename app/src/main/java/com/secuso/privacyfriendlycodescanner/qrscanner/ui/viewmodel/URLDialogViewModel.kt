@@ -273,7 +273,9 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         // Add option to add domain to trusted domains
         val trustedDomainsCheckbox = urlDialog.findViewById<CheckBox>(R.id.url_dialog_trust_domain_checkbox)
         if (canBeAddedToTrustedDomains(classification.hints)) {
+            trustedDomainsCheckbox.setOnCheckedChangeListener(null)
             trustedDomainsCheckbox.visibility = VISIBLE
+            trustedDomainsCheckbox.isChecked = false
             trustedDomainsCheckbox.text = urlDialog.context.getString(R.string.url_dialog_add_to_trusted_domains, classification.baseDomain)
             trustedDomainsCheckbox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
