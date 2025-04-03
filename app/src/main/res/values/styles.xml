@@ -12,7 +12,7 @@
         <item name="colorGeneratorIcons">?attr/colorIcons</item>
         <item name="colorHistoryIconBackground">@color/white</item>
         <item name="colorHistoryIcons">?attr/colorIcons</item>
-        <item name="colorHighlight">@color/highlight_transparent_light</item>
+        <item name="colorHighlight">@color/highlight_transparent_dark</item>
         <item name="colorSelectableItemHighlight">@color/highlight_selectable_transparent_dark</item>
         <item name="colorNavbarHeaderBackground">@color/white</item>
         <item name="colorNavbarHeaderText">@color/colorPrimary</item>
