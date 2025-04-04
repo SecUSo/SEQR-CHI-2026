@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="bool_history"
-        android:summary="@string/pref_description_enable_history"
-        android:title="@string/pref_title_enable_history" />
+    <PreferenceCategory android:title="@string/pref_general_settings_category_title">
+        <ListPreference
+            android:defaultValue="@string/pref_app_theme_default"
+            android:entries="@array/pref_app_theme_entries"
+            android:entryValues="@array/pref_app_theme_values"
+            android:key="pref_app_theme"
+            android:summary="%s"
+            android:title="@string/pref_app_theme_title" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_search_engine_enabled"
+            android:summary="@string/pref_search_engine_enabled_summary"
+            android:title="@string/pref_search_engine_enabled_title" />
+        <ListPreference
+            android:defaultValue="@string/pref_search_engine_default"
+            android:dependency="pref_search_engine_enabled"
+            android:entries="@array/pref_search_engine_entries"
+            android:entryValues="@array/pref_search_engine_values"
+            android:key="pref_search_engine"
+            android:summary="%s"
+            android:title="@string/pref_search_engine_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_history_settings_category_title">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="bool_history"
+            android:summary="@string/pref_description_enable_history"
+            android:title="@string/pref_title_enable_history" />
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="pref_save_real_image_to_history"
-        android:summary="@string/pref_save_real_image_to_history_summary"
-        android:title="@string/pref_save_real_image_to_history_title" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_save_real_image_to_history"
+            android:summary="@string/pref_save_real_image_to_history_summary"
+            android:title="@string/pref_save_real_image_to_history_title" />
+    </PreferenceCategory>
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="pref_search_engine_enabled"
-        android:summary="@string/pref_search_engine_enabled_summary"
-        android:title="@string/pref_search_engine_enabled_title" />
+    <PreferenceCategory android:title="@string/pref_scanner_settings_category_title">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_enable_beep_on_scan"
+            android:summary="@string/pref_enable_beep_on_scan_summary"
+            android:title="@string/pref_enable_beep_on_scan_title" />
+    </PreferenceCategory>
 
-    <ListPreference
-        android:defaultValue="@string/pref_search_engine_default"
-        android:dependency="pref_search_engine_enabled"
-        android:entries="@array/pref_search_engine_entries"
-        android:entryValues="@array/pref_search_engine_values"
-        android:key="pref_search_engine"
-        android:summary="%s"
-        android:title="@string/pref_search_engine_title" />
+    <com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ExtendedSummaryPreferenceCategory
 
-    <ListPreference
-        android:defaultValue="@string/pref_app_theme_default"
-        android:entries="@array/pref_app_theme_entries"
-        android:entryValues="@array/pref_app_theme_values"
-        android:key="pref_app_theme"
-        android:summary="%s"
-        android:title="@string/pref_app_theme_title" />
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="pref_enable_beep_on_scan"
-        android:summary="@string/pref_enable_beep_on_scan_summary"
-        android:title="@string/pref_enable_beep_on_scan_title" />
-
-    <PreferenceCategory
-        android:summary="@string/url_dialog_settings_summary"
-        android:title="@string/url_dialog_settings_title">
+        android:title="@string/url_dialog_settings_category_title"
+        app:singleLineTitle="false"
+        app:summary="@string/url_dialog_settings_category_summary">
         <EditTextPreference
             android:defaultValue="2"
             android:key="pref_url_classification_min_visits_required"
@@ -68,6 +74,6 @@
             android:key="pref_url_classification_trusted_domains"
             android:summary="@string/url_dialog_settings_trusted_domains_summary"
             android:title="@string/url_dialog_settings_trusted_domains_title" />
-    </PreferenceCategory>
+    </com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ExtendedSummaryPreferenceCategory>
 
 </PreferenceScreen>
