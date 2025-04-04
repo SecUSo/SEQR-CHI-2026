@@ -47,15 +47,11 @@
         android:title="@string/url_dialog_settings_title">
         <EditTextPreference
             android:defaultValue="2"
-            android:digits="0123456789"
-            android:inputType="numberDecimal"
             android:key="pref_url_classification_min_visits_required"
             android:summary="@string/url_dialog_settings_min_visits_required_summary"
             android:title="@string/url_dialog_settings_min_visits_required_title" />
         <EditTextPreference
             android:defaultValue="3"
-            android:digits="0123456789"
-            android:inputType="numberDecimal"
             android:key="pref_url_classification_grey_case_waiting_time"
             android:summary="@string/url_dialog_settings_waiting_time_summary"
             android:title="@string/url_dialog_settings_waiting_time_title" />

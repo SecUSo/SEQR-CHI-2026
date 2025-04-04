@@ -19,13 +19,17 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -58,7 +62,7 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                     }
                     true
                 }
-            findPreference<Preference>("pref_url_classification_visited_urls")!!.onPreferenceClickListener =
+            findPreference<Preference>("pref_url_classification_visited_urls")?.onPreferenceClickListener =
                 Preference.OnPreferenceClickListener { preference: Preference? ->
                     createEditableListViewDialog(
                         R.string.url_dialog_settings_edit_visited_urls_title,
@@ -69,7 +73,7 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                     ).show()
                     true
                 }
-            findPreference<Preference>("pref_url_classification_trusted_domains")!!.onPreferenceClickListener =
+            findPreference<Preference>("pref_url_classification_trusted_domains")?.onPreferenceClickListener =
                 Preference.OnPreferenceClickListener { preference: Preference? ->
                     createEditableListViewDialog(
                         R.string.url_dialog_settings_edit_trusted_domains_title,
@@ -80,6 +84,16 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                     ).show()
                     true
                 }
+            findPreference<EditTextPreference>(PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED)?.setOnBindEditTextListener { setEditTextProperties(it) }
+            findPreference<EditTextPreference>(PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME)?.setOnBindEditTextListener { setEditTextProperties(it) }
+        }
+
+        private fun setEditTextProperties(editText: EditText) {
+            editText.inputType = EditorInfo.TYPE_CLASS_NUMBER
+            editText.setSingleLine()
+            editText.setSelectAllOnFocus(true)
+            editText.selectAll()
+            editText.filters = arrayOf(InputFilter.LengthFilter(2))
         }
 
         private fun <T> createEditableListViewDialog(
