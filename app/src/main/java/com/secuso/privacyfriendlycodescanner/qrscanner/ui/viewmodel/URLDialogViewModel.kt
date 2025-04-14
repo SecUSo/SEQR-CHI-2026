@@ -148,7 +148,16 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
                 GREEN to KNOWN_DOMAIN
             }
         } else if (hints.contains(TRUSTED_DOMAIN)) {
-            GREEN to TRUSTED_DOMAIN
+            if (hints.contains(KNOWN_FILE_UPLOAD_HOST)) {
+                if (hints.contains(VISITED_URL)) {
+                    // Exact url was visited before
+                    GREEN to VISITED_URL
+                } else {
+                    GREY to KNOWN_FILE_UPLOAD_HOST
+                }
+            } else {
+                GREEN to TRUSTED_DOMAIN
+            }
         } else if (hints.contains(VISITED_URL)) {
             GREEN to VISITED_URL
         } else if (hints.contains(VISITED_BASE_DOMAIN)) {
