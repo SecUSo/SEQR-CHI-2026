@@ -17,13 +17,19 @@
 */
 package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -68,7 +74,9 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                         R.string.url_dialog_settings_edit_visited_urls_title,
                         viewModel.urlEntities,
                         { EditableListAdapter.Data(getString(R.string.url_dialog_settings_visited_url_info, it.url, it.visits), it.id) },
-                        { id -> viewModel.deleteURLEntity(id) },
+                        { data -> viewModel.deleteURLEntity(data.id) },
+                        { data -> viewModel.getURLEntityAndPerformAction(data.id, { entity -> copyToClipboard(entity.url) }) },
+                        { viewModel.deleteAllURLEntities() },
                         requireContext()
                     ).show()
                     true
@@ -79,7 +87,9 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                         R.string.url_dialog_settings_edit_trusted_domains_title,
                         viewModel.domainEntities,
                         { EditableListAdapter.Data(it.baseDomain, it.id) },
-                        { id -> viewModel.deleteDomainEntity(id) },
+                        { data -> viewModel.deleteDomainEntity(data.id) },
+                        { data -> viewModel.getDomainEntityAndPerformAction(data.id, { entity -> copyToClipboard(entity.baseDomain) }) },
+                        { viewModel.deleteAllDomainEntities() },
                         requireContext()
                     ).show()
                     true
@@ -99,12 +109,20 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
             @StringRes title: Int,
             dataSource: LiveData<List<T>>,
             converter: (T) -> EditableListAdapter.Data,
-            action: (id: Int) -> Unit,
+            buttonAction: (data: EditableListAdapter.Data) -> Unit,
+            textAction: (data: EditableListAdapter.Data) -> Unit,
+            deleteAllAction: () -> Unit,
             context: Context
         ): MaterialAlertDialogBuilder {
-            val simpleAdapter = EditableListAdapter(action)
+            val simpleAdapter = EditableListAdapter(buttonAction, textAction)
 
-            val view = LayoutInflater.from(context).inflate(R.layout.dialog_editable_list, null, false)
+            val view = LayoutInflater.from(context).inflate(R.layout.dialog_manage_list, null, false)
+            val totalEntriesTextView = view.findViewById<TextView>(R.id.totalEntitiesTextView)
+            view.findViewById<ImageButton>(R.id.delete_all_button).setOnClickListener {
+                MaterialAlertDialogBuilder(context).setTitle(R.string.delete_all).setMessage(R.string.delete_all_confirmation)
+                    .setCancelable(true).setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.yes) { _, _ -> deleteAllAction() }.show()
+            }
             view.findViewById<RecyclerView>(R.id.item_list).apply {
                 layoutManager = LinearLayoutManager(context)
                 val dividerItemDecoration = DividerItemDecoration(
@@ -114,13 +132,25 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                 addItemDecoration(dividerItemDecoration)
                 adapter = simpleAdapter
             }
-            dataSource.observe(this, { list -> simpleAdapter.updateData(list.map(converter)) })
+            dataSource.observe(this, { list ->
+                simpleAdapter.updateData(list.map(converter))
+                totalEntriesTextView.setText(getString(R.string.number_of_entries, list.size))
+            })
             val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
                 .setView(view)
                 .setTitle(title)
                 .setCancelable(false)
                 .setNegativeButton(R.string.close) { _, _ -> dataSource.removeObservers(this) }
             return builder
+        }
+
+        private fun copyToClipboard(text: String) {
+            (requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+                ClipData.newPlainText("URL", text)
+            )
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                Toast.makeText(activity, R.string.content_copied, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

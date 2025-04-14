@@ -23,11 +23,27 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun getURLEntityAndPerformAction(id: Int, action: (entity: URLEntity) -> Unit) {
+        viewModelScope.launch { action(urlClassificationDatabase.urlDao().getByID(id)) }
+    }
+
     fun deleteURLEntity(id: Int) {
         viewModelScope.launch { urlClassificationDatabase.urlDao().delete(URLEntity(id, "", "", 0)) }
     }
 
+    fun deleteAllURLEntities() {
+        viewModelScope.launch { urlClassificationDatabase.urlDao().deleteAll() }
+    }
+
+    fun getDomainEntityAndPerformAction(id: Int, action: (entity: TrustedDomainEntity) -> Unit) {
+        viewModelScope.launch { action(urlClassificationDatabase.trustedDomainDao().getByID(id)) }
+    }
+
     fun deleteDomainEntity(id: Int) {
         viewModelScope.launch { urlClassificationDatabase.trustedDomainDao().delete(TrustedDomainEntity(id, "")) }
+    }
+
+    fun deleteAllDomainEntities() {
+        viewModelScope.launch { urlClassificationDatabase.trustedDomainDao().deleteAll() }
     }
 }

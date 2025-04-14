@@ -32,5 +32,6 @@
         android:src="@drawable/ic_baseline_delete_24"
         app:layout_constraintBottom_toBottomOf="@id/textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/textView" />
+        app:layout_constraintTop_toTopOf="@id/textView"
+        app:tint="@color/lightred" />
 </androidx.constraintlayout.widget.ConstraintLayout>

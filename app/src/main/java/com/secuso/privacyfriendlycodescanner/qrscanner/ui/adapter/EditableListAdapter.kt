@@ -3,13 +3,12 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
 
-class EditableListAdapter(val action: (id: Int) -> Unit) : RecyclerView.Adapter<EditableListAdapter.ViewHolder>() {
+class EditableListAdapter(val buttonAction: (data: Data) -> Unit, val textAction: (data: Data) -> Unit) : RecyclerView.Adapter<EditableListAdapter.ViewHolder>() {
     private var data: ArrayList<Data> = ArrayList()
 
     fun updateData(newData: Collection<Data>) {
@@ -26,8 +25,11 @@ class EditableListAdapter(val action: (id: Int) -> Unit) : RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textView.text = data[position].text
+        holder.textView.setOnClickListener {
+            textAction(data[position])
+        }
         holder.button.setOnClickListener {
-            action(data[position].id)
+            buttonAction(data[position])
         }
     }
 

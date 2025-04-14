@@ -33,6 +33,9 @@ interface URLDao {
     @Delete
     suspend fun delete(urlEntity: URLEntity)
 
+    @Query("SELECT * FROM visitedUrls WHERE id = :id")
+    suspend fun getByID(id: Int): URLEntity
+
     @Query("SELECT * FROM visitedUrls")
     suspend fun getAll(): List<URLEntity>
 
@@ -53,4 +56,7 @@ interface URLDao {
 
     @Query("UPDATE visitedUrls SET visits = visits + 1 WHERE id = :id")
     suspend fun incrementVisits(id: Int)
+
+    @Query("DELETE FROM visitedUrls")
+    suspend fun deleteAll()
 }

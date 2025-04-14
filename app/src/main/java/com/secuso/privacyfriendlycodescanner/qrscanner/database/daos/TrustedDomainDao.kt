@@ -33,6 +33,9 @@ interface TrustedDomainDao {
     @Delete
     suspend fun delete(trustedDomainEntity: TrustedDomainEntity)
 
+    @Query("SELECT * FROM trustedDomains WHERE id = :id")
+    suspend fun getByID(id: Int): TrustedDomainEntity
+
     @Query("SELECT * FROM trustedDomains")
     suspend fun getAll(): List<TrustedDomainEntity>
 
@@ -41,4 +44,7 @@ interface TrustedDomainDao {
 
     @Query("SELECT * FROM trustedDomains WHERE baseDomain = :baseDomain")
     suspend fun findByDomain(baseDomain: String): TrustedDomainEntity?
+
+    @Query("DELETE FROM trustedDomains")
+    suspend fun deleteAll()
 }
