@@ -232,7 +232,7 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun incrementVisits(classification: URLClassification) {
-        if (classification.case == GREEN) {
+        if (classification.case == GREEN || !URLClassification.isUrlTrackingEnabled(context)) {
             return
         }
         viewModelScope.launch {

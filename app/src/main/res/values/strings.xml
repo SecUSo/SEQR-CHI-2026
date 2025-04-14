@@ -409,8 +409,6 @@
     <string name="url_tutorial_slide_9_content"><u>Demonstration 2:</u>\n\nHere is an example of a dialog window where the QR code scanner application did not find the <b>exampie.com</b> (notice the visual resemble of the letter “i” instead of “l") on the list of legitimate website addresses, and therefore shows the unknown risk type of dialog window. In this case the website is a <b>phishing</b> one which tries to make you believe it goes to example.com which is not the case.</string>
     <string name="url_dialog_settings_category_title">URL dialog</string>
     <string name="url_dialog_settings_category_summary">These settings configure the behavior of the dialog shown when you scan a qr code containing a url. See the tutorial for more information.</string>
-    <string name="url_dialog_settings_min_visits_required_title">Number of visits required</string>
-    <string name="url_dialog_settings_min_visits_required_summary">This value defines how often you have to open a specific url for the app to consider it as low risks.</string>
     <string name="url_dialog_settings_waiting_time_title">Protection time</string>
     <string name="url_dialog_settings_waiting_time_summary">Specifies how many seconds you have to wait before you can open a url with unknown risk.</string>
     <string name="url_dialog_settings_visited_urls_title">Visited URLs history</string>

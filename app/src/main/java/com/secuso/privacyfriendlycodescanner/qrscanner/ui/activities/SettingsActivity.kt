@@ -84,7 +84,6 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                     ).show()
                     true
                 }
-            findPreference<EditTextPreference>(PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED)?.setOnBindEditTextListener { setEditTextProperties(it) }
             findPreference<EditTextPreference>(PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME)?.setOnBindEditTextListener { setEditTextProperties(it) }
         }
 

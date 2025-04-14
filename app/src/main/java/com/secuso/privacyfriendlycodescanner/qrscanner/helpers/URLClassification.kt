@@ -133,8 +133,8 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
         private var _knownDomains: Set<String> = setOf()
         private var _shortLinkDomains: Set<String> = setOf()
         private var _fileUploadHosts: Set<String> = setOf()
-        private final val DEFAULT_NUM_VISITS_REQUIRED = 2
-        private final val DEFAULT_SECONDS_TO_WAIT = 3
+        private val DEFAULT_NUM_VISITS_REQUIRED = 2
+        private val DEFAULT_SECONDS_TO_WAIT = 3
 
         private fun readListFromRaw(context: Context, @RawRes resourceID: Int): Set<String> {
             return context.resources.openRawResource(resourceID)
@@ -172,13 +172,7 @@ class URLClassification(val uri: String, val baseDomain: String, val case: Case)
         }
 
         fun getVisitsRequired(context: Context): Int {
-            val value: Int = try {
-                context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
-                    .getString(PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED, "2")?.toInt() ?: DEFAULT_NUM_VISITS_REQUIRED
-            } catch (e: NumberFormatException) {
-                DEFAULT_NUM_VISITS_REQUIRED
-            }
-            return value
+            return DEFAULT_NUM_VISITS_REQUIRED
         }
 
         fun getGreyCaseWaitingTimeMillis(context: Context): Int {

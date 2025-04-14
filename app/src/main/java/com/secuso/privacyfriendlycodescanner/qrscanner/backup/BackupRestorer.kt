@@ -103,11 +103,21 @@ class BackupRestorer : IBackupRestorer {
         while (reader.hasNext()) {
             val name: String = reader.nextName()
             when (name) {
-                "bool_history", "pref_save_real_image_to_history", "pref_search_engine_enabled", "pref_enable_beep_on_scan", "image_picker_first_click" -> pref
-                    .putBoolean(name, reader.nextBoolean())
+                "bool_history",
+                "pref_save_real_image_to_history",
+                "pref_search_engine_enabled",
+                "pref_enable_beep_on_scan",
+                "image_picker_first_click",
+                PreferenceKeys.URL_CLASSIFICATION_URL_TRACKING_ENABLED
+                    -> pref.putBoolean(name, reader.nextBoolean())
 
-                PreferenceKeys.SEARCH_ENGINE, PreferenceKeys.APP_THEME -> pref.putString(name, reader.nextString())
-                PreferenceKeys.URL_CLASSIFICATION_MIN_VISITS_REQUIRED, PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME -> pref.putInt(name, reader.nextInt())
+                PreferenceKeys.SEARCH_ENGINE,
+                PreferenceKeys.APP_THEME
+                    -> pref.putString(name, reader.nextString())
+
+                PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME
+                    -> pref.putInt(name, reader.nextInt())
+
                 else -> throw RuntimeException("Unknown preference $name")
             }
         }

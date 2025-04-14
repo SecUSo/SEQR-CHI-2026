@@ -23,7 +23,6 @@ import android.content.Context
 object PreferenceKeys {
     const val SEARCH_ENGINE = "pref_search_engine"
     const val APP_THEME = "pref_app_theme"
-    const val URL_CLASSIFICATION_MIN_VISITS_REQUIRED = "pref_url_classification_min_visits_required"
     const val URL_CLASSIFICATION_GREY_CASE_WAITING_TIME = "pref_url_classification_grey_case_waiting_time"
     const val URL_CLASSIFICATION_URL_TRACKING_ENABLED = "pref_url_classification_url_tracking_enabled"
     fun getDefaultSharedPreferencesName(context: Context): String {
