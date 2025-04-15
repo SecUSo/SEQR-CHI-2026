@@ -115,7 +115,8 @@ class BackupRestorer : IBackupRestorer {
                 PreferenceKeys.APP_THEME
                     -> pref.putString(name, reader.nextString())
 
-                PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME
+                PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME,
+                PreferenceKeys.APP_VERSION_LAST_OPENED
                     -> pref.putInt(name, reader.nextInt())
 
                 else -> throw RuntimeException("Unknown preference $name")

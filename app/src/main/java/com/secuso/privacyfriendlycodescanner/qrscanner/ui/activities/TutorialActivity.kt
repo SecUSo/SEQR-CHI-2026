@@ -33,8 +33,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.secuso.privacyfriendlycodescanner.qrscanner.BuildConfig
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PrefManager
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys.getDefaultSharedPreferencesName
 
 /**
  * Class structure taken from tutorial at http://www.androidhive.info/2016/05/android-build-intro-slider-app/
@@ -57,10 +60,9 @@ class TutorialActivity : AppCompatActivity() {
 
         // Checking for first time launch - before calling setContentView()
         prefManager = PrefManager(this)
-        val i = intent
 
 
-        if (!prefManager!!.isFirstTimeLaunch && (i == null || ACTION_SHOW_ANYWAYS != i.action)) {
+        if (!prefManager!!.isFirstTimeLaunch && (intent == null || (ACTION_SHOW_ANYWAYS != intent.action && ACTION_SHOW_RELEASE_NOTES != intent.action))) {
             launchHomeScreen()
             return
         }
@@ -83,20 +85,25 @@ class TutorialActivity : AppCompatActivity() {
 
         // layouts of all welcome sliders
         // add few more layouts if you want
-        layouts = intArrayOf(
-            R.layout.tutorial_slide1,
-            R.layout.tutorial_slide2,
-            R.layout.tutorial_slide3,
-            R.layout.url_tutorial_slide1,
-            R.layout.url_tutorial_slide2,
-            R.layout.url_tutorial_slide3,
-            R.layout.url_tutorial_slide4,
-            R.layout.url_tutorial_slide5,
-            R.layout.url_tutorial_slide6,
-            R.layout.url_tutorial_slide7,
-            R.layout.url_tutorial_slide8,
-            R.layout.url_tutorial_slide9,
-        )
+        if (prefManager!!.isFirstTimeLaunch || (intent != null && intent.action == ACTION_SHOW_ANYWAYS)) {
+            layouts = DEFAULT_TUTORIAL_SLIDES
+        } else {
+            val appPreferences = getSharedPreferences(getDefaultSharedPreferencesName(this), MODE_PRIVATE)
+            val lastVersionOpened = appPreferences.getInt(PreferenceKeys.APP_VERSION_LAST_OPENED, 0)
+            val releaseNotes = mutableListOf<Int>()
+            for (releaseNote in RELEASE_NOTES) {
+                if (releaseNote.versionCode > lastVersionOpened) {
+                    releaseNotes.addAll(releaseNote.slides.toList())
+                }
+            }
+
+            if (releaseNotes.size == 0) {
+                // No new patch notes, continue to app
+                launchHomeScreen()
+                return
+            }
+            layouts = releaseNotes.toIntArray()
+        }
 
         // adding bottom dots
         addBottomDots(0)
@@ -121,6 +128,7 @@ class TutorialActivity : AppCompatActivity() {
                 launchHomeScreen()
             }
         }
+        updateButtons(viewPager!!.currentItem)
     }
 
     private fun addBottomDots(currentPage: Int) {
@@ -147,6 +155,8 @@ class TutorialActivity : AppCompatActivity() {
 
     private fun launchHomeScreen() {
         prefManager!!.isFirstTimeLaunch = false
+        val appPreferences = getSharedPreferences(getDefaultSharedPreferencesName(this), MODE_PRIVATE)
+        appPreferences.edit().putInt(PreferenceKeys.APP_VERSION_LAST_OPENED, BuildConfig.VERSION_CODE).apply()
         val intent = Intent(this, ScannerActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
@@ -158,22 +168,26 @@ class TutorialActivity : AppCompatActivity() {
         override fun onPageSelected(position: Int) {
             addBottomDots(position)
 
-            // changing the next button text 'NEXT' / 'GOT IT'
-            if (position == layouts.size - 1) {
-                // last page. make button text to GOT IT
-                btnNext!!.setText(R.string.okay)
-                btnSkip!!.visibility = View.GONE
-            } else {
-                // still pages are left
-                btnNext!!.setText(R.string.next)
-                btnSkip!!.visibility = View.VISIBLE
-            }
+            updateButtons(position)
         }
 
         override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
         }
 
         override fun onPageScrollStateChanged(arg0: Int) {
+        }
+    }
+
+    private fun updateButtons(position: Int) {
+        // changing the next button text 'NEXT' / 'GOT IT'
+        if (position == layouts.size - 1) {
+            // last page. make button text to GOT IT
+            btnNext!!.setText(R.string.okay)
+            btnSkip!!.visibility = View.GONE
+        } else {
+            // still pages are left
+            btnNext!!.setText(R.string.next)
+            btnSkip!!.visibility = View.VISIBLE
         }
     }
 
@@ -218,9 +232,31 @@ class TutorialActivity : AppCompatActivity() {
         }
     }
 
+    private class ReleaseNotes(val versionCode: Int, val slides: List<Int>)
+
     companion object {
         private val TAG: String = TutorialActivity::class.java.simpleName
+
         @JvmField
         val ACTION_SHOW_ANYWAYS: String = TAG + ".ACTION_SHOW_ANYWAYS"
+
+        @JvmField
+        val ACTION_SHOW_RELEASE_NOTES: String = TAG + ".ACTION_SHOW_RELEASE_NOTES"
+
+        private val DEFAULT_TUTORIAL_SLIDES = intArrayOf(
+            R.layout.tutorial_slide1,
+            R.layout.tutorial_slide2,
+            R.layout.tutorial_slide3,
+            R.layout.url_tutorial_slide1,
+            R.layout.url_tutorial_slide2,
+            R.layout.url_tutorial_slide3,
+            R.layout.url_tutorial_slide4,
+            R.layout.url_tutorial_slide5,
+            R.layout.url_tutorial_slide6,
+            R.layout.url_tutorial_slide7,
+            R.layout.url_tutorial_slide8,
+            R.layout.url_tutorial_slide9,
+        )
+        private val RELEASE_NOTES: List<ReleaseNotes> = listOf()
     }
 }

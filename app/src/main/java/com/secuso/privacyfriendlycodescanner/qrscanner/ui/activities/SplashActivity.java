@@ -17,12 +17,17 @@
 */
 
 package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.secuso.privacyfriendlycodescanner.qrscanner.BuildConfig;
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PrefManager;
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys;
 
 /**
  * @author Karola Marky
@@ -37,14 +42,27 @@ public class SplashActivity extends AppCompatActivity {
 
         PrefManager firstStartPref = new PrefManager(this);
 
+        SharedPreferences appPreferences = getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(this), Context.MODE_PRIVATE);
+
         Intent mainIntent;
 
-        if(firstStartPref.isFirstTimeLaunch()) {
-            mainIntent = new Intent(this, TutorialActivity.class);
+        if (appPreferences.getInt(PreferenceKeys.APP_VERSION_LAST_OPENED, -1) == -1) {
+            if (firstStartPref.isFirstTimeLaunch()) {
+                mainIntent = new Intent(this, TutorialActivity.class);
+            } else {
+                appPreferences.edit().putInt(PreferenceKeys.APP_VERSION_LAST_OPENED, 0).apply();
+                mainIntent = new Intent(this, TutorialActivity.class);
+                mainIntent.setAction(TutorialActivity.ACTION_SHOW_RELEASE_NOTES);
+            }
         } else {
-            mainIntent = new Intent(this, ScannerActivity.class);
+            firstStartPref.setFirstTimeLaunch(false);
+            if (appPreferences.getInt(PreferenceKeys.APP_VERSION_LAST_OPENED, -1) == BuildConfig.VERSION_CODE) {
+                mainIntent = new Intent(this, ScannerActivity.class);
+            } else {
+                mainIntent = new Intent(this, TutorialActivity.class);
+                mainIntent.setAction(TutorialActivity.ACTION_SHOW_RELEASE_NOTES);
+            }
         }
-
         startActivity(mainIntent);
         finish();
     }
