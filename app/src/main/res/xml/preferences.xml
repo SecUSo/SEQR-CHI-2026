@@ -24,7 +24,8 @@
             android:summary="%s"
             android:title="@string/pref_search_engine_title" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_history_settings_category_title">
+    <PreferenceCategory android:title="@string/pref_history_settings_category_title"
+        app:isPreferenceVisible="false">
         <SwitchPreference
             android:defaultValue="true"
             android:key="bool_history"
