@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QR Scanner</string>
     <string name="navigation_drawer_open">Åbn navigering</string>
     <string name="navigation_drawer_close">Luk navigering</string>
     <string name="qr_scanner">QR Scanner</string>

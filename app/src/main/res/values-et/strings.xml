@@ -27,7 +27,6 @@
     <string name="pref_title_enable_history">Kasuta ajalugu</string>
     <string name="help_data_backup_answer">Me oleme ka teinud eraldi rakenduse „Privaatsussõbralik varundus“, mis sobib selle ja teiste rakenduste andmete varundamiseks ja taastamiseks. Lisaks saad seda kasutada andmete tõstmiseks teise nutiseadmesse.</string>
     <string name="pref_keep_duplicates_explanation">Ka korduvad skaneeringud salvestuvad ajaloos</string>
-    <string name="app_name">QR-koodi skanner</string>
     <string name="navigation_drawer_open">Ava menüü</string>
     <string name="navigation_drawer_close">Sulge menüü</string>
     <string name="qr_scanner">QR-koodi skanner</string>

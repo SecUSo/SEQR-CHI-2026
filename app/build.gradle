@@ -7,7 +7,7 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId "com.secuso.privacyFriendlyCodeScanner"
+        applicationId "com.SEQR"
         minSdkVersion 23
         compileSdk 34
         targetSdkVersion 34

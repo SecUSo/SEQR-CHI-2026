@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Karekod Tarayıcı</string>
     <string name="navigation_drawer_open">Gezinti çekmecesini aç</string>
     <string name="navigation_drawer_close">Gezinti çekmecesini kapat</string>
     <string name="qr_scanner">Karekod Tarayıcı</string>

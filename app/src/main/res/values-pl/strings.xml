@@ -198,7 +198,6 @@
     <string name="qr_scanner">Skaner QR</string>
     <string name="code_stored">Kod QR zapisany w galerii</string>
     <string name="description_send_email">Zeskanowany przez Ciebie kod QR zawiera wypełniony e-mail. Aby <i>wysłać</i> go lub <i>dodać adres do kontaktu</i>, naciśnij Kontynuuj.</string>
-    <string name="app_name">QR Scanner</string>
     <string name="postal_address">Adres pocztowy</string>
     <string name="confirmation">Potwierdzenie</string>
     <string name="pref_save_real_image_to_history_title">Zapisuj rzeczywisty kod</string>

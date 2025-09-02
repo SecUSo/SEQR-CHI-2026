@@ -9,7 +9,6 @@
     <string name="description_send_email">El codi QR que heu escanejat conté un correu redactat. Per a poder-lo <i>enviar</i> o <i>afegir l\'adreça a un contacte</i>, feu clic a Continua.</string>
     <string name="description_sms">El codi QR que heu escanejat conté un SMS. Per a poder <i>enviar</i> el SMS o <i>afegir el número a un contacte</i>, feu clic a Continua.</string>
     <string name="pref_description_enable_history">Els escanejos anteriors s\'enregistren per a mostrar-los més endavant</string>
-    <string name="app_name">QR Scanner</string>
     <string name="navigation_drawer_open">Obre el quadre de navegació</string>
     <string name="navigation_drawer_close">Tanca el quadre de navegació</string>
     <string name="qr_scanner">QR Scanner</string>

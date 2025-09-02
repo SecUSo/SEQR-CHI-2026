@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
-    <string name="app_name">QR-skanner</string>
     <string name="navigation_drawer_close">Lukk navigasjonsskuff</string>
     <string name="qr_scanner">QR-skanner</string>
     <string name="qr_generator">QR-generator</string>

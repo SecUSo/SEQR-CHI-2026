@@ -102,7 +102,6 @@
         <item quantity="other">%1$d položek vybráno</item>
     </plurals>
     <string name="activity_scanner_permission_needed_explanation">Tato aplikace vyžaduje přístup k fotoaparátu pro čtení QR kódů.</string>
-    <string name="app_name">Čtečka QR</string>
     <string name="history">Historie</string>
     <string name="settings">Nastavení</string>
     <string name="help">Nápověda</string>

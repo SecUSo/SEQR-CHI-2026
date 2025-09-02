@@ -180,7 +180,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.secuso.qrscanner.fileprovider"
+            android:authorities="com.seqr.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

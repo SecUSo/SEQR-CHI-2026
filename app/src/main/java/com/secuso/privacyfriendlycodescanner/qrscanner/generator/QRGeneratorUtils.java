@@ -106,7 +106,7 @@ public class QRGeneratorUtils {
         imageFilePath.mkdir();
         imageFilePath = new File(imageFilePath, buildFileString());
         File file = writeToFile(imageFilePath, image);
-        cache = FileProvider.getUriForFile(context, "org.secuso.qrscanner.fileprovider", file);
+        cache = FileProvider.getUriForFile(context, "com.seqr.fileprovider", file);
         return cache;
     }
 

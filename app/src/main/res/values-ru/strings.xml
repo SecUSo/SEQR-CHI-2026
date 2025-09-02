@@ -8,7 +8,6 @@
     <string name="title_activity_history">История</string>
     <string name="selected_items">предметы выбраны</string>
     <string name="Scan_qr">Сканировать</string>
-    <string name="app_name">QR Scanner</string>
     <string name="navigation_drawer_close">Закрыть панель навигации</string>
     <string name="qr_scanner">Сканер</string>
     <string name="qr_generator">Генератор</string>
