@@ -53,8 +53,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.client.result.ParsedResultType;
 import com.google.zxing.client.result.ResultParser;
+import com.google.zxing.client.result.TelParsedResult;
 import com.google.zxing.client.result.URIParsedResult;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -64,11 +64,11 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory;
 import com.journeyapps.barcodescanner.camera.CameraInstance;
 import com.journeyapps.barcodescanner.camera.CameraSettings;
 import com.secuso.privacyfriendlycodescanner.qrscanner.R;
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.URLClassification;
-import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils;
+import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.BaseActivity;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.ScannerViewModel;
 import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.URLDialogViewModel;
+import com.secuso.privacyfriendlycodescanner.qrscanner.util.WebSearchUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
@@ -142,28 +142,22 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         beepManager.playBeepSoundAndVibrate();
 
-        if (ResultParser.parseResult(result.getResult()).getType() == ParsedResultType.URI) {
-            String uri = ((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI();
-            if (Utils.extractBaseDomainFromURI(uri) == null) {
-                ResultActivity.startResultActivity(ScannerActivity.this, result);
-                return;
+        urlDialogViewModel.getClassification().removeObservers(this);
+        urlDialogViewModel.initURLDialog(result.getResult());
+        findViewById(R.id.progressBarURLDialog).setVisibility(View.VISIBLE);
+        urlDialogViewModel.getClassification().observe(this, QRClassification -> {
+            if (QRClassification != null) {
+                findViewById(R.id.progressBarURLDialog).setVisibility(View.GONE);
+                showURLDialog(QRClassification, result);
             }
-            urlDialogViewModel.getClassification().removeObservers(this);
-            urlDialogViewModel.initURLDialog(uri);
-            urlDialogViewModel.getClassification().observe(this, URLClassification -> {
-                if (URLClassification != null) {
-                    showURLDialog(URLClassification, result);
-                }
-            });
-        } else {
-            ResultActivity.startResultActivity(ScannerActivity.this, result);
-        }
+        });
+
 //            Intent resultIntent = new Intent(ScannerActivity.this, ResultActivity.class);
 //            resultIntent.putExtra("QRResult", new ParcelableResultDecorator(result.getResult()), result.getBitmapWithResultPoints());
 //            startActivity(resultIntent);
     }
 
-    private void showURLDialog(URLClassification classification, BarcodeResult result) {
+    private void showURLDialog(QRClassification classification, BarcodeResult result) {
         View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
         urlDialogViewModel.setupURLDialogView(urlDialog, classification, this);
         urlDialog.setVisibility(View.VISIBLE);
@@ -173,12 +167,34 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         urlDialogViewModel.initContinueButton(classification);
         urlDialogViewModel.getUrlDialogContinueButtonPeriodicTrigger().observe(this, unit -> {
             Button continueButton = findViewById(R.id.url_dialog_continue_button);
-            urlDialogViewModel.updateURLDialogContinueButton(continueButton, v -> {
-                urlDialogViewModel.incrementVisits(classification);
-                openUrl(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI());
+            urlDialogViewModel.updateURLDialogContinueButton(classification, continueButton, v -> {
+                switch (classification.getCase()) {
+                    case GREEN,GREY_UNKNOWN -> {
+                        urlDialogViewModel.incrementVisits(classification);
+                        openUrl(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI());
+                    }
+                    case GREY_TEXT -> {
+                        openWebSearch(classification.getText());
+                    }
+                    case GREY_PHONE -> {
+                        callPhoneNumber(Uri.parse(((TelParsedResult) ResultParser.parseResult(result.getResult())).getTelURI()));
+                    }
+                    case RED -> {
+                        closeScannerDialog();
+                    }
+                }
             }, this);
 
         });
+    }
+
+    private void callPhoneNumber(Uri telURI) {
+        Intent call = new Intent(Intent.ACTION_DIAL, telURI);
+        startActivity(Intent.createChooser(call, getResources().getStringArray(R.array.tel_array)[0]));
+    }
+
+    private void openWebSearch(String searchText) {
+        WebSearchUtil.openWebSearchDialog(this, searchText);
     }
 
     private void openUrl(String qrurl) {
@@ -208,8 +224,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
         barcodeScannerView.getBarcodeView().addStateListener(stateListener);
 
         findViewById(R.id.dialog_close_button).setOnClickListener(view -> {
-            findViewById(R.id.activity_scanner_url_dialog).setVisibility(View.INVISIBLE);
-            initScan();
+            closeScannerDialog();
         });
 
         beepManager = new BeepManager(this);
@@ -262,6 +277,11 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
                 initScan();
             }
         }
+    }
+
+    private void closeScannerDialog() {
+        findViewById(R.id.activity_scanner_url_dialog).setVisibility(View.INVISIBLE);
+        initScan();
     }
 
     private void updateCameraZoom(Float zoomLevel) {

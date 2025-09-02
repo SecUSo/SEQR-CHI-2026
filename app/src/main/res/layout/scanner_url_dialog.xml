@@ -36,7 +36,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/lexend"
             android:text="@string/url_dialog_risk_explanation_unknown_risk_part_1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -53,9 +52,9 @@
             android:background="@color/transparent"
             android:drawableEnd="@drawable/ic_info_black_24dp"
             android:drawableTint="?attr/colorURLDialogIcon"
-            android:fontFamily="@font/lexend"
             android:padding="0dp"
             android:text="example.com"
+            android:minWidth="0dp"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -70,26 +69,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/lexend"
             android:text="@string/url_dialog_risk_explanation_unknown_risk_part_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/url_dialog_domain" />
-
-        <CheckBox
-            android:id="@+id/url_dialog_trust_domain_checkbox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/url_dialog_add_to_trusted_domains"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/url_dialog_risk_explanation_part_2"
-            tools:visibility="visible" />
 
         <Button
             android:id="@+id/url_dialog_continue_button"
@@ -100,13 +84,11 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:fontFamily="@font/lexend"
-            android:text="@string/url_dialog_continue_button"
-            android:textStyle="bold"
+            android:text="@string/url_dialog_continue_button_url"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/url_dialog_trust_domain_checkbox" />
+            app:layout_constraintTop_toBottomOf="@+id/url_dialog_risk_explanation_part_2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

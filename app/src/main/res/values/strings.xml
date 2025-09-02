@@ -364,30 +364,28 @@
         <item>Brave</item>
     </string-array>
     <string name="pref_search_engine_default" translatable="false">DUCK_DUCK_GO</string>
-    <string name="url_dialog_continue_button">Open website address now</string>
+    <string name="url_dialog_continue_button_url">Open the website address now</string>
+    <string name="url_dialog_continue_button_phone">Call the phone number now</string>
+    <string name="url_dialog_continue_button_text">Search online now</string>
     <string name="url_dialog_risk_explanation_low_risk_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
     <string name="url_dialog_risk_explanation_low_risk_part_2">is well established.</string>
-    <string name="url_dialog_risk_explanation_low_risk_known_domain_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_low_risk_known_domain_part_2">is well established.</string>
-    <string name="url_dialog_risk_explanation_low_risk_trusted_domain_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_low_risk_trusted_domain_part_2">is well established.</string>
-    <string name="url_dialog_risk_explanation_low_risk_visited_url_part_1"><b>Low Risk:</b> Opening the website associated with the just-scanned QR code is deemed to be of low risk since the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_low_risk_visited_url_part_2">is well established.</string>
     <string name="url_dialog_risk_explanation_unknown_risk_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
     <string name="url_dialog_risk_explanation_unknown_risk_part_2">before opening the website address.</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_redirect_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_redirect_part_2">before opening the website address.</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_short_url_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_short_url_part_2">before opening the website address.</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_known_file_upload_host_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_known_file_upload_host_part_2">before opening the website address.</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_visited_base_domain_part_1"><b>Unknown Risk:</b> The risk of opening the website associated with the just-scanned QR code cannot be automatically determined. You have to assess the risk by yourself.\n\nPlease check and verify the legitimacy of</string>
-    <string name="url_dialog_risk_explanation_unknown_risk_visited_base_domain_part_2">before opening the website address.</string>
-    <string name="url_dialog_website_open_time">This website address can be opened in %ds</string>
+    <string name="url_dialog_risk_explanation_phone_part_1"><b>Unknown Risk:</b> The just-scanned QR code contains the following telephone number. Beware that by calling some phone numbers you might incur high phone bill costs.</string>
+    <string name="url_dialog_risk_explanation_phone_part_2"></string>
+    <string name="url_dialog_risk_explanation_text_part_1"><b>Unknown Risk:</b> The just-scanned QR code contains the plain text shown below. You can search online for this text, but this could potentially leak information and will send the text to the search engine.</string>
+    <string name="url_dialog_risk_explanation_text_part_2"></string>
+    <string name="url_dialog_risk_explanation_high_risk_part_1"><b>High Risk:</b> The website encoded in the just-scanned QR code has been associated with phishing before. SEQR deems the risk as high, and disabled the opening of the website.</string>
+    <string name="url_dialog_risk_explanation_high_risk_part_2"></string>
+    <string name="url_dialog_website_url_open_time">This website address can be opened in %ds</string>
+    <string name="url_dialog_phone_open_time">This phone number can be called in %ds</string>
+    <string name="url_dialog_text_open_time">This text can be searched online in %ds</string>
     <string name="url_dialog_add_to_trusted_domains">Add %s to trusted domains.</string>
     <string name="url_dialog_add_to_trusted_domains_dialog_title">Add %s to trusted domains?</string>
     <string name="url_dialog_add_to_trusted_domains_dialog_text">Are you sure, you want to add <b>%1$s</b> to trusted domains. This marks all further urls leading to this domain (<b>%1$s</b>) or a subdomain (e.g. <b>example.%1$s</b>) of it in green. So only do this if you are sure that you can trust urls leading to this domain and that it is for example not possible to upload malicious files to this domain that could result in a malicious url shared with you. You can always manage your trusted domains in the apps settings.</string>
-    <string name="full_url_dialog_title">Full URL</string>
+    <string name="full_url_dialog_title">QR Code content</string>
+    <string name="full_url_dialog_copy">Copy</string>
+    <string name="full_url_dialog_copy_high_risk">Copy phishing url</string>
     <string name="url_tutorial_slide_1_title">Info [1/9]: Preliminary information</string>
     <string name="url_tutorial_slide_1_content">The QR code scanner application assists you in determining whether it\'s safe to visit the website address associated with a scanned QR code.\n\nImmediately after scanning the QR code, but before the website address is loaded into the browser or an application, the scanner presents a dialog window containing the domain of the website associated with the QR code.</string>
     <string name="url_tutorial_slide_2_title">Info [2/9]: Domain of the website address</string>

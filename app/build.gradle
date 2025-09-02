@@ -96,7 +96,10 @@ dependencies {
 
     implementation("com.google.guava:guava:33.4.0-android")
 
+    implementation 'io.michaelrocks:libphonenumber-android:9.0.12'
+
     implementation 'com.google.code.gson:gson:2.9.1' //Versions newer than 2.9 only work on API levels > 21 (https://github.com/google/gson/issues/2310). App crashes e.g. when saving a generated QR code to history on API 17.
+    testImplementation 'org.json:json:20250517'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.core:core-ktx:1.12.0" // latest version still supporting API 17; 1.13.0 requires API 19
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2" //2.7.0+ not compatible with API < 19
