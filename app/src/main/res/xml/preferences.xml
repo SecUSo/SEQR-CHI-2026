@@ -9,12 +9,14 @@
             android:entryValues="@array/pref_app_theme_values"
             android:key="pref_app_theme"
             android:summary="%s"
-            android:title="@string/pref_app_theme_title" />
+            android:title="@string/pref_app_theme_title"
+            app:isPreferenceVisible="false" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_search_engine_enabled"
             android:summary="@string/pref_search_engine_enabled_summary"
-            android:title="@string/pref_search_engine_enabled_title" />
+            android:title="@string/pref_search_engine_enabled_title"
+            app:isPreferenceVisible="false" />
         <ListPreference
             android:defaultValue="@string/pref_search_engine_default"
             android:dependency="pref_search_engine_enabled"
@@ -69,7 +71,8 @@
         <Preference
             android:key="pref_url_classification_trusted_domains"
             android:summary="@string/url_dialog_settings_trusted_domains_summary"
-            android:title="@string/url_dialog_settings_trusted_domains_title" />
+            android:title="@string/url_dialog_settings_trusted_domains_title"
+            app:isPreferenceVisible="false" />
     </com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ExtendedSummaryPreferenceCategory>
 
 </PreferenceScreen>

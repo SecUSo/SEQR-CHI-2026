@@ -188,7 +188,7 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
             }
 
             GREY_TEXT -> {
-                if (classification.text.length < 100) classification.text else classification.text.substring(0, 100)
+                if (classification.text.length < 100) classification.text else classification.text.substring(0, 100) + "..."
             }
 
             GREY_PHONE -> {

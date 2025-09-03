@@ -35,20 +35,21 @@ class PFACodeScannerApplication : MultiDexApplication(), Configuration.Provider 
         BackupManager.backupRestorer = BackupRestorer()
 
 
-        when (PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            .getString(PreferenceKeys.APP_THEME, getString(R.string.pref_app_theme_default))) {
-            "DARK" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-
-            "LIGHT" -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-
-            else -> {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            }
-        }
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//        when (PreferenceManager.getDefaultSharedPreferences(applicationContext)
+//            .getString(PreferenceKeys.APP_THEME, getString(R.string.pref_app_theme_default))) {
+//            "DARK" -> {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//            }
+//
+//            "LIGHT" -> {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//            }
+//
+//            else -> {
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+//            }
+//        }
     }
 
     override val workManagerConfiguration = Configuration.Builder().setMinimumLoggingLevel(Log.INFO).build()
