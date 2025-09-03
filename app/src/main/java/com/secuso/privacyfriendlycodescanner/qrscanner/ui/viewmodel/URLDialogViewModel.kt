@@ -24,6 +24,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.text.Html
 import android.view.View
 import android.widget.Button
@@ -31,6 +32,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.toHtml
 import androidx.core.text.toSpanned
 import androidx.lifecycle.AndroidViewModel
@@ -92,7 +94,7 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         } else {
             classification.text
         }
-        val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(activity)
+        val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(activity, R.style.AppTheme_CustomMaterialDialog)
             .setMessage(message)
             .setTitle(R.string.full_url_dialog_title)
             .setCancelable(true)
@@ -194,7 +196,8 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
         domainTextView.setOnClickListener { view: View ->
-            createUrlDetailsDialog(classification, view, activity).show()
+            val dialog = createUrlDetailsDialog(classification, view, activity).show()
+            dialog.window?.findViewById<TextView>(android.R.id.message)?.setTypeface(ResourcesCompat.getFont(context, R.font.lexend))
         }
     }
 
