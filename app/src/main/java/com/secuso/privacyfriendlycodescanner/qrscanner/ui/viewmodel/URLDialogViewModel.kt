@@ -135,7 +135,8 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
             return
         }
         viewModelScope.launch {
-            val url = classification.text
+            // We only use the short text to identify the base domain
+            val url = classification.shortText
             if (classification.case == GREY_UNKNOWN) {
                 var dbEntry = urlClassificationDatabase.urlDao().findByURL(url)
                 if (dbEntry == null) {

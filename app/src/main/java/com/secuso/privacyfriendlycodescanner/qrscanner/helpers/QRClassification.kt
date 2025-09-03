@@ -281,9 +281,9 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 return getURLClassification(newURL, context, urlClassificationDatabase)
             }
 
-            // 6. Check if the url was visited multiple times before
+            // 6. Check if the base domain was visited multiple times before
             Log.d(TAG, "Checking url classification database for $url")
-            if (context != null && urlClassificationDatabase != null && urlClassificationDatabase.urlDao().findByURL(url) != null
+            if (context != null && urlClassificationDatabase != null && baseDomain != null && urlClassificationDatabase.urlDao().findByURL(baseDomain) != null
                 && urlClassificationDatabase.urlDao().findByURL(url)!!.visits >= getVisitsRequired(context)
             ) {
                 Log.d(TAG, "Found entry with enough visits for $url")
