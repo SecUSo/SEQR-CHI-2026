@@ -244,9 +244,9 @@ class TutorialActivity : AppCompatActivity() {
         val ACTION_SHOW_RELEASE_NOTES: String = TAG + ".ACTION_SHOW_RELEASE_NOTES"
 
         private val DEFAULT_TUTORIAL_SLIDES = intArrayOf(
-            R.layout.tutorial_slide1,
-            R.layout.tutorial_slide2,
-            R.layout.tutorial_slide3,
+//            R.layout.tutorial_slide1,
+//            R.layout.tutorial_slide2,
+//            R.layout.tutorial_slide3,
             R.layout.url_tutorial_slide1,
             R.layout.url_tutorial_slide2,
             R.layout.url_tutorial_slide3,
