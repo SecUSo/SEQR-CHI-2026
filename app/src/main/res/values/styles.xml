@@ -36,6 +36,7 @@
     <style name="AppTheme.CustomMaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog" >
         <item name="android:textAppearance">@style/AppTheme.URLDialog.Text</item>
         <item name="shapeAppearanceMediumComponent">@style/RoundedCornerAppearance</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

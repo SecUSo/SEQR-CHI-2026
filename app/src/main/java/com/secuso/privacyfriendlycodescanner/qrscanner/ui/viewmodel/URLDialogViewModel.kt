@@ -98,27 +98,18 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
             .setMessage(message)
             .setTitle(R.string.full_url_dialog_title)
             .setCancelable(true)
-            .setNegativeButton(R.string.close, null)
+            .setNegativeButton(android.R.string.cancel, null)
+        builder.setPositiveButton(R.string.full_url_dialog_copy) { _, _ ->
+            (activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+                ClipData.newPlainText(
+                    "Text",
+                    classification.text
+                )
+            )
+            Toast.makeText(activity, R.string.content_copied, Toast.LENGTH_SHORT).show()
+        }
         if (classification.case == RED) {
-            builder.setPositiveButton(R.string.full_url_dialog_copy_high_risk) { _, _ ->
-                (activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
-                    ClipData.newPlainText(
-                        "Text",
-                        classification.text
-                    )
-                )
-                Toast.makeText(activity, R.string.content_copied, Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            builder.setPositiveButton(R.string.full_url_dialog_copy) { _, _ ->
-                (activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
-                    ClipData.newPlainText(
-                        "Text",
-                        classification.text
-                    )
-                )
-                Toast.makeText(activity, R.string.content_copied, Toast.LENGTH_SHORT).show()
-            }
+            builder.setNegativeButton(R.string.full_url_dialog_close_high_risk, null)
         }
         return builder
     }

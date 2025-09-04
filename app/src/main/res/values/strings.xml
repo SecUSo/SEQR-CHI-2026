@@ -385,7 +385,8 @@
     <string name="url_dialog_add_to_trusted_domains_dialog_text">Are you sure, you want to add <b>%1$s</b> to trusted domains. This marks all further urls leading to this domain (<b>%1$s</b>) or a subdomain (e.g. <b>example.%1$s</b>) of it in green. So only do this if you are sure that you can trust urls leading to this domain and that it is for example not possible to upload malicious files to this domain that could result in a malicious url shared with you. You can always manage your trusted domains in the apps settings.</string>
     <string name="full_url_dialog_title">QR Code content</string>
     <string name="full_url_dialog_copy">Copy</string>
-    <string name="full_url_dialog_copy_high_risk">Copy phishing url</string>
+    <string name="full_url_dialog_copy_high_risk">Copy</string>
+    <string name="full_url_dialog_close_high_risk">Cancel (Recommended)</string>
     <string name="url_tutorial_slide_1_title">Info [1/9]: Preliminary information</string>
     <string name="url_tutorial_slide_1_content">The QR code scanner application assists you in determining whether it\'s safe to visit the website address associated with a scanned QR code.\n\nImmediately after scanning the QR code, but before the website address is loaded into the browser or an application, the scanner presents a dialog window containing the domain of the website associated with the QR code.</string>
     <string name="url_tutorial_slide_2_title">Info [2/9]: Domain of the website address</string>
