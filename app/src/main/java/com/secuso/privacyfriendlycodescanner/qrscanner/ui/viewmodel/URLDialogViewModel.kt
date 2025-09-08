@@ -24,17 +24,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Typeface
-import android.text.Html
 import android.view.View
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.toHtml
-import androidx.core.text.toSpanned
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -175,12 +170,8 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         // Set the dialog to be shown when clicking on the info button
         val domainTextView: Button = urlDialog.findViewById<Button>(R.id.url_dialog_domain)
         domainTextView.text = when (classification.case) {
-            GREEN, RED, GREY_UNKNOWN -> {
+            GREEN, RED, GREY_UNKNOWN, GREY_TEXT -> {
                 classification.shortText
-            }
-
-            GREY_TEXT -> {
-                if (classification.text.length < 100) classification.text else classification.text.substring(0, 100) + "..."
             }
 
             GREY_PHONE -> {

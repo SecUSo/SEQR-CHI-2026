@@ -179,7 +179,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
 
                 } else {
                     // Should not happen, show as text
-                    return QRClassification(rawResult.text, "", GREY_TEXT)
+                    return createTextClassification(rawResult.text)
                 }
             } else if (type == ParsedResultType.TEL) {
                 val phoneNumber = (parsedResult as TelParsedResult).number
@@ -188,18 +188,23 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                     val numberProto = phoneUtil.parse(phoneNumber, null)
                     if (!phoneUtil.isValidNumber(numberProto)) {
                         // Show as text
-                        return QRClassification(rawResult.text, "", GREY_TEXT)
+                        return createTextClassification(rawResult.text)
                     } else {
                         val regionISO = phoneUtil.getRegionCodeForCountryCode(numberProto.countryCode)
                         return QRClassification(phoneNumber, regionISO, GREY_PHONE)
                     }
                 } catch (e: NumberParseException) {
                     // Show as text
-                    return QRClassification(rawResult.text, "", GREY_TEXT)
+                    return createTextClassification(rawResult.text)
                 }
             } else {
-                return QRClassification(rawResult.text, "", GREY_TEXT)
+                return createTextClassification(rawResult.text)
             }
+        }
+
+        private fun createTextClassification(text: String): QRClassification {
+            val shortText = if (text.length < 100) text else text.substring(0, 100) + "..."
+            return QRClassification(text, shortText, GREY_TEXT)
         }
 
         suspend fun getURLClassification(urlString: String, context: Context?, urlClassificationDatabase: URLClassificationDatabase?): QRClassification {
