@@ -26,6 +26,8 @@ object PreferenceKeys {
     const val APP_VERSION_LAST_OPENED = "pref_app_version_last_opened"
     const val URL_CLASSIFICATION_GREY_CASE_WAITING_TIME = "pref_url_classification_grey_case_waiting_time"
     const val URL_CLASSIFICATION_URL_TRACKING_ENABLED = "pref_url_classification_url_tracking_enabled"
+    const val PHISHING_PROTECTION_PHISHTANK_ENABLED = "pref_phishing_protection_phishtank_enabled"
+    const val PHISHING_PROTECTION_RESOLVE_REDIRECTS_ENABLED = "pref_phishing_protection_resolve_redirects_enabled"
 
     @JvmStatic
     fun getDefaultSharedPreferencesName(context: Context): String {

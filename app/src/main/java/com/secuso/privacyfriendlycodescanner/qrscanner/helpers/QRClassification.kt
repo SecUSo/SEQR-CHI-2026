@@ -134,6 +134,16 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 .getBoolean(PreferenceKeys.URL_CLASSIFICATION_URL_TRACKING_ENABLED, true)
         }
 
+        fun isPhishTankEnabled(context: Context): Boolean {
+            return context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
+                .getBoolean(PreferenceKeys.PHISHING_PROTECTION_PHISHTANK_ENABLED, true)
+        }
+
+        fun isResolveRedirectsEnabled(context: Context): Boolean {
+            return context.getSharedPreferences(PreferenceKeys.getDefaultSharedPreferencesName(context), Context.MODE_PRIVATE)
+                .getBoolean(PreferenceKeys.PHISHING_PROTECTION_RESOLVE_REDIRECTS_ENABLED, true)
+        }
+
         suspend fun getClassification(rawResult: Result, context: Context, urlClassificationDatabase: URLClassificationDatabase?): QRClassification {
             val parsedResult = ResultParser.parseResult(rawResult)
             var type =
@@ -214,26 +224,28 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
 
             // 1. We check if the url can be found on PhishTank
             Log.d(TAG, "Checking PhishTank for $rawURL")
-            when (val phishTankCheckerResult = PhishTankChecker.checkUrl(rawURL)) {
-                is PhishTankChecker.PhishResult.Success -> {
-                    if (PhishTankChecker.isPhish(phishTankCheckerResult.data)) {
-                        Log.d(TAG, "PhishTank detected $rawURL as phish.")
-                        case = RED
-                        Log.d(TAG, "Final classification for $rawURL: $case")
-                        // We need to return immediately, as it could otherwise be overridden by known domains
-                        return QRClassification(rawURL, baseDomain ?: rawURL, case)
+            if (context != null && isPhishTankEnabled(context)) {
+                when (val phishTankCheckerResult = PhishTankChecker.checkUrl(rawURL)) {
+                    is PhishTankChecker.PhishResult.Success -> {
+                        if (PhishTankChecker.isPhish(phishTankCheckerResult.data)) {
+                            Log.d(TAG, "PhishTank detected $rawURL as phish.")
+                            case = RED
+                            Log.d(TAG, "Final classification for $rawURL: $case")
+                            // We need to return immediately, as it could otherwise be overridden by known domains
+                            return QRClassification(rawURL, baseDomain ?: rawURL, case)
+                        }
                     }
-                }
 
-                is PhishTankChecker.PhishResult.Error -> {
-                    Log.d(TAG, "PhishTank returned an error for $rawURL")
-                    //TODO how to handle error?
+                    is PhishTankChecker.PhishResult.Error -> {
+                        Log.d(TAG, "PhishTank returned an error for $rawURL")
+                        //TODO how to handle error?
+                    }
                 }
             }
 
             // 2. We check if it is a redirect and resolve it. Run recursive check afterwards.
             Log.d(TAG, "Checking for redirects for $rawURL")
-            if (RedirectChecker.getRedirectURL(rawURL).isNotEmpty()) {
+            if (context != null && isResolveRedirectsEnabled(context) && RedirectChecker.getRedirectURL(rawURL).isNotEmpty()) {
                 val redirectedURL = RedirectChecker.getRedirectURL(rawURL)
                 Log.d(TAG, "Found redirect: $rawURL -> $redirectedURL")
                 if (redirectedURL != rawURL) {
@@ -244,7 +256,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
 
             // 3. We check if it is a known short url service and resolve it. Run recursive check afterwards.
             Log.d(TAG, "Checking for short urls for $rawURL")
-            if (context != null && getShortLinkDomains(context).contains(baseDomain)) {
+            if (context != null && isResolveRedirectsEnabled(context) && getShortLinkDomains(context).contains(baseDomain)) {
                 Log.d(TAG, "Short url detected for $rawURL")
                 val redirectedURL = RedirectResolver.resolveRedirect(rawURL)
                 Log.d(TAG, "ShortLink resolved: $rawURL -> $redirectedURL")

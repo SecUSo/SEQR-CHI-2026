@@ -49,6 +49,20 @@
             android:title="@string/pref_enable_beep_on_scan_title" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/phishing_protection_settings_category_title">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_phishing_protection_phishtank_enabled"
+            android:title="@string/phishing_protection_settings_check_phishtank_title"
+            android:summary="@string/phishing_protection_settings_check_phishtank_summary"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_phishing_protection_resolve_redirects_enabled"
+            android:title="@string/phishing_protection_settings_resolve_redirects_title"
+            android:summary="@string/phishing_protection_settings_resolve_redirects_summary"/>
+    </PreferenceCategory>
+
     <com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ExtendedSummaryPreferenceCategory
 
         android:title="@string/url_dialog_settings_category_title"

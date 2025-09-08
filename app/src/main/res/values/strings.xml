@@ -428,6 +428,15 @@
     <string name="url_dialog_settings_edit_trusted_domains_title">Edit trusted domains</string>
     <string name="url_dialog_settings_edit_visited_urls_title">Edit visited urls</string>
     <string name="url_dialog_settings_visited_url_info">%s\nVisits: %d</string>
+    <string name="phishing_protection_settings_category_title">Phishing Protection</string>
+    <string name="phishing_protection_settings_check_phishtank_title">PhishTank</string>
+    <string name="phishing_protection_settings_check_phishtank_summary">Use PhishTank to check scanned urls for potential phishing websites.
+        When you scan a QR code that contains a URL with this setting enabled,
+        the url will be send to phishtank.org to check if it is a known phishing website.</string>
+    <string name="phishing_protection_settings_resolve_redirects_title">Resolve redirects</string>
+    <string name="phishing_protection_settings_resolve_redirects_summary">Automatically resolve short urls and redirects.
+        When you scan a QR code that contains a URL to a known short url service or redirect,
+        the app will automatically connect to that service and try to resolve the real url behind the redirect.</string>
     <string name="number_of_entries">Number of entries: %d</string>
     <string name="delete_all_confirmation">Do you want to delete all entries?</string>
     <string-array name="pref_search_engine_values" translatable="false">
