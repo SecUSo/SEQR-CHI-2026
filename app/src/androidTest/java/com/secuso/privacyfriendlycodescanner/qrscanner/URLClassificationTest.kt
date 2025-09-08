@@ -143,6 +143,16 @@ class URLClassificationTest {
         }
     }
 
+    @Test
+    fun check_hex_encoded_domain_preview_correct() {
+        runBlocking {
+            val classification = getClassification("https://goo%67le.com/xyz%67/")
+            Assert.assertEquals("google.com", classification.shortText)
+            Assert.assertEquals("https://google.com/xyz%67/", classification.text)
+            Assert.assertEquals(Case.GREEN, classification.case)
+        }
+    }
+
 
     @Throws(InterruptedException::class)
     private suspend fun getURLClassification(url: String): QRClassification {

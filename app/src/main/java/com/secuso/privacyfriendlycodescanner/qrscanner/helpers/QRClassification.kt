@@ -2,7 +2,6 @@ package com.secuso.privacyfriendlycodescanner.qrscanner.helpers
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.net.Uri
 import android.util.Log
 import android.util.TypedValue
 import androidx.annotation.RawRes
@@ -23,6 +22,7 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.
 import io.michaelrocks.libphonenumber.android.NumberParseException
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import java.net.IDN
+import java.net.URL
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -193,24 +193,19 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
         }
 
         suspend fun getURLClassification(urlString: String, context: Context?, urlClassificationDatabase: URLClassificationDatabase?): QRClassification {
-            val url = urlString
-            val uri = Uri.parse(url)
-            val host = uri.host
-            if (host == null) {
-                return QRClassification(url, "", GREY_UNKNOWN)
-            }
-            val protocol = uri.scheme
-            val path = uri.path
-            val parameters = uri.query
-            val fragment = uri.fragment
-            val baseDomain: String? = Utils.extractBaseDomainFromURI(url)
+            val rawURL = urlString
+            val parsedURL = URL(rawURL)
+            val host = parsedURL.host ?: return QRClassification(rawURL, "", GREY_UNKNOWN)
+            val protocol = parsedURL.protocol
+            val path = parsedURL.path
+            val parameters = parsedURL.query
+            val baseDomain: String? = Utils.extractBaseDomainFromURI(rawURL)
             Log.d(
-                TAG, "Performing classification for $url\n" +
+                TAG, "Performing classification for $rawURL\n" +
                         "host: $host\n" +
                         "protocol: $protocol\n" +
                         "path: $path\n" +
                         "parameters: $parameters\n" +
-                        "fragment: $fragment\n" +
                         "baseDomain: $baseDomain\n"
             )
 
@@ -218,42 +213,42 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
             var case = GREY_UNKNOWN
 
             // 1. We check if the url can be found on PhishTank
-            Log.d(TAG, "Checking PhishTank for $url")
-            when (val phishTankCheckerResult = PhishTankChecker.checkUrl(url)) {
+            Log.d(TAG, "Checking PhishTank for $rawURL")
+            when (val phishTankCheckerResult = PhishTankChecker.checkUrl(rawURL)) {
                 is PhishTankChecker.PhishResult.Success -> {
                     if (PhishTankChecker.isPhish(phishTankCheckerResult.data)) {
-                        Log.d(TAG, "PhishTank detected $url as phish.")
+                        Log.d(TAG, "PhishTank detected $rawURL as phish.")
                         case = RED
-                        Log.d(TAG, "Final classification for $url: $case")
+                        Log.d(TAG, "Final classification for $rawURL: $case")
                         // We need to return immediately, as it could otherwise be overridden by known domains
-                        return QRClassification(url, baseDomain ?: url, case)
+                        return QRClassification(rawURL, baseDomain ?: rawURL, case)
                     }
                 }
 
                 is PhishTankChecker.PhishResult.Error -> {
-                    Log.d(TAG, "PhishTank returned an error for $url")
+                    Log.d(TAG, "PhishTank returned an error for $rawURL")
                     //TODO how to handle error?
                 }
             }
 
             // 2. We check if it is a redirect and resolve it. Run recursive check afterwards.
-            Log.d(TAG, "Checking for redirects for $url")
-            if (RedirectChecker.getRedirectURL(url).isNotEmpty()) {
-                val redirectedURL = RedirectChecker.getRedirectURL(url)
-                Log.d(TAG, "Found redirect: $url -> $redirectedURL")
-                if (redirectedURL != url) {
+            Log.d(TAG, "Checking for redirects for $rawURL")
+            if (RedirectChecker.getRedirectURL(rawURL).isNotEmpty()) {
+                val redirectedURL = RedirectChecker.getRedirectURL(rawURL)
+                Log.d(TAG, "Found redirect: $rawURL -> $redirectedURL")
+                if (redirectedURL != rawURL) {
                     Log.d(TAG, "Running recursive check for $redirectedURL")
                     return getURLClassification(redirectedURL, context, urlClassificationDatabase)
                 }
             }
 
             // 3. We check if it is a known short url service and resolve it. Run recursive check afterwards.
-            Log.d(TAG, "Checking for short urls for $url")
+            Log.d(TAG, "Checking for short urls for $rawURL")
             if (context != null && getShortLinkDomains(context).contains(baseDomain)) {
-                Log.d(TAG, "Short url detected for $url")
-                val redirectedURL = RedirectResolver.resolveRedirect(url)
-                Log.d(TAG, "ShortLink resolved: $url -> $redirectedURL")
-                if (redirectedURL.isNotEmpty() && redirectedURL != url) {
+                Log.d(TAG, "Short url detected for $rawURL")
+                val redirectedURL = RedirectResolver.resolveRedirect(rawURL)
+                Log.d(TAG, "ShortLink resolved: $rawURL -> $redirectedURL")
+                if (redirectedURL.isNotEmpty() && redirectedURL != rawURL) {
                     Log.d(TAG, "Running recursive check for $redirectedURL")
                     return getURLClassification(redirectedURL, context, urlClassificationDatabase)
                 }
@@ -263,9 +258,9 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
             Log.d(TAG, "Checking for hex encoding for $host")
             val hexDecodedHost = URLDecoder.decode(host, StandardCharsets.UTF_8.name())
             if (host != hexDecodedHost) {
-                Log.d(TAG, "Difference between host and hex decoded version detected for $url")
+                Log.d(TAG, "Difference between host and hex decoded version detected for $rawURL")
                 Log.d(TAG, "Hex decoded: $host -> $hexDecodedHost")
-                val newURL = url.replace(host, hexDecodedHost)
+                val newURL = rawURL.replace(host, hexDecodedHost)
                 Log.d(TAG, "Running recursive check for $newURL")
                 return getURLClassification(newURL, context, urlClassificationDatabase)
             }
@@ -274,32 +269,32 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
             Log.d(TAG, "Checking for utf8 encoding for $host")
             val asciiHost = IDN.toASCII(host)
             if (host != asciiHost) {
-                Log.d(TAG, "Difference between host and ascii encoded version detected for $url")
+                Log.d(TAG, "Difference between host and ascii encoded version detected for $rawURL")
                 Log.d(TAG, "ASCII encoded: $host -> $asciiHost")
-                val newURL = url.replace(host, asciiHost)
+                val newURL = rawURL.replace(host, asciiHost)
                 Log.d(TAG, "Running recursive check for $newURL")
                 return getURLClassification(newURL, context, urlClassificationDatabase)
             }
 
             // 6. Check if the base domain was visited multiple times before
-            Log.d(TAG, "Checking url classification database for $url")
+            Log.d(TAG, "Checking url classification database for $rawURL")
             if (context != null && urlClassificationDatabase != null && baseDomain != null && urlClassificationDatabase.urlDao().findByURL(baseDomain) != null
-                && urlClassificationDatabase.urlDao().findByURL(url)!!.visits >= getVisitsRequired(context)
+                && urlClassificationDatabase.urlDao().findByURL(rawURL)!!.visits >= getVisitsRequired(context)
             ) {
-                Log.d(TAG, "Found entry with enough visits for $url")
+                Log.d(TAG, "Found entry with enough visits for $rawURL")
                 case = GREEN
-                Log.d(TAG, "Classification for $url: $case")
+                Log.d(TAG, "Classification for $rawURL: $case")
             }
 
             // 7. Check if the domain is on the known domains list
-            Log.d(TAG, "Checking known domains for $url")
+            Log.d(TAG, "Checking known domains for $rawURL")
             if (context != null && getKnownDomains(context).contains(baseDomain)) {
-                Log.d(TAG, "Found known domain for $url")
+                Log.d(TAG, "Found known domain for $rawURL")
                 case = GREEN
-                Log.d(TAG, "Classification for $url: $case")
+                Log.d(TAG, "Classification for $rawURL: $case")
             }
-            Log.d(TAG, "Final classification for $url: $case")
-            return QRClassification(url, baseDomain ?: url, case)
+            Log.d(TAG, "Final classification for $rawURL: $case")
+            return QRClassification(rawURL, baseDomain ?: rawURL, case)
         }
     }
 }

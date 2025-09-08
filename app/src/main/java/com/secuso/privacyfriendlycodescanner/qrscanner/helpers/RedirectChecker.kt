@@ -1,7 +1,7 @@
 package com.secuso.privacyfriendlycodescanner.qrscanner.helpers
 
-import android.net.Uri
 import com.google.common.net.InternetDomainName
+import java.net.URL
 
 /**
  * Utility object that inspects a URL and extracts the value of a redirect query parameter
@@ -57,7 +57,7 @@ object RedirectChecker {
      *
      */
     fun getRedirectURL(url: String): String {
-        val uri = Uri.parse(url)
+        val uri = URL(url)
         val parameters = uri.query
         val baseDomain = Utils.extractBaseDomainFromURI(url)
         if (parameters == null) {
