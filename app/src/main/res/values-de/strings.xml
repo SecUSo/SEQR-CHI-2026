@@ -153,7 +153,6 @@
     <string name="title_activity_result_tel">Telefonnummer gefunden</string>
     <string name="title_activity_result_product">Produkt gefunden</string>
     <string name="title_activity_result_contact">Kontakt gefunden</string>
-    <string name="app_name_long">Privacy-Friendly-QR-Scanner</string>
     <string name="action_help">Hilfe</string>
     <!-- ###DRAWER###-->
     <string name="navigation_drawer_open">Navigationsmenü öffnen</string>

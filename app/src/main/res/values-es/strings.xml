@@ -38,7 +38,6 @@
     <string name="github"><a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">Repositorio de GitHub</a></string>
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">Sitio web de SECUSO</a></string>
     <string name="about_libraries">Librerías utilizadas:</string>
-    <string name="app_name_long">Privacy Friendly QR Scanner</string>
     <string name="version_number">Versión v%s</string>
     <string name="delete_items">Eliminar elementos</string>
     <string name="description_contact">El código QR escaneado contiene información de contacto. Para <i>importarla</i> a tu lista de contactos, haz clic en Continuar.</string>

@@ -41,8 +41,7 @@
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_info"
-            android:title="@string/about"
-            android:visible="false"/>
+            android:title="@string/about" />
     </group>
 
 </menu>

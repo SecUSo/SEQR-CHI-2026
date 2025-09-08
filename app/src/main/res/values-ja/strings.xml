@@ -40,7 +40,6 @@
     <string name="github"><a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub リポジトリー</a></string>
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">SECUSO ウェブサイト</a></string>
     <string name="about_libraries">使用したライブラリー:</string>
-    <string name="app_name_long">Privacy Friendly QR Scanner</string>
     <string name="version_number">バージョン v%s</string>
     <string name="delete_items">削除された項目</string>
     <string name="scan_text">この枠を読み取りたい QR コードに重ねてください。</string>

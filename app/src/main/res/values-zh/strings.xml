@@ -39,7 +39,6 @@
     <string name="github"><a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub-Repo</a></string>
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">SECUSO-Website</a></string>
     <string name="about_libraries">使用的库：</string>
-    <string name="app_name_long">Privacy Friendly QR Scanner</string>
     <string name="version_number">版本 v%s</string>
     <string name="delete_items">删除</string>
     <string name="scan_text">将此窗口放在您要解码的代码上方。</string>

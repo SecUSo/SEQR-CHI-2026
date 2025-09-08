@@ -23,20 +23,13 @@
         android:weightSum="1"
         tools:context=".ui.activities.AboutActivity">
 
-        <ImageView
-            android:id="@+id/barcodeLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:layout_weight="0.36"
-            app:srcCompat="@drawable/privacyfriendlyappslogo" />
-
         <TextView
             android:id="@+id/appName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
+            android:textSize="20sp"
             android:text="@string/app_name_long" />
 
         <TextView
@@ -48,69 +41,13 @@
             android:layout_marginTop="5dp"/>
 
         <TextView
-            android:id="@+id/textFieldAuthor"
+            android:id="@+id/textFieldDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:text="@string/about_author" />
-
-        <TextView
-            android:id="@+id/textFieldAuthorNames"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/about_author_names" />
-
-        <TextView
-            android:id="@+id/textFieldAffiliation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:text="@string/about_affiliation"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            app:srcCompat="?attr/secusoLogoDrawable" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:text="@string/privacy_friendly" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="@string/more_info" />
-
-        <TextView
-            android:id="@+id/secusoWebsite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/url_secuso"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/githubURL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:text="@string/github"
-            android:textStyle="bold" />
+            android:text="@string/about_description" />
 
         <TextView
             android:layout_width="wrap_content"

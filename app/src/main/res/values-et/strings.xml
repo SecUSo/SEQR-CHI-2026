@@ -59,7 +59,6 @@
     <string name="tutorial">Juhend</string>
     <string name="about_author">Autorid:</string>
     <string name="about_author_string">%s ja kaasautorid.</string>
-    <string name="app_name_long">Privaatsussõbralik QR-koodi skanner</string>
     <string name="about_affiliation">Loodud üheskoos organisatsiooniga</string>
     <string name="more_info">Lisateavet leiad:</string>
     <string name="github"><a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">Lähtekoodi hoidla GitHubis</a></string>

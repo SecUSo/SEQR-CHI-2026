@@ -34,7 +34,16 @@
     <string name="tutorial">Tutorial</string>
     <!--###ABOUT###-->
     <string name="about_author">Authors: </string>
-    <string name="about_author_names" translatable="false">Christopher Beckmann, Bassel Hanna, Philipp Rack, Tobias Länge</string>
+    <string name="about_author_names_pfa" translatable="false">Christopher Beckmann, Bassel Hanna, Philipp Rack, Tobias Länge</string>
+    <string name="about_description">SEQR is a prototype QR‑code reader built to safeguard users against malicious QR codes.
+        It augments the conventional scanning workflow with a suite of security features.
+        This version presents a review‑ready build of SEQR,
+        intended for academic evaluation and user‑testing to validate its effectiveness,
+        usability, and resilience against emerging QR‑based attack vectors.
+        \n
+        \n
+        This app is based on the app "Privacy Friendly QR Scanner", whose source code is licensed under GPLv3, as is this app\'s source code.
+        More information about the original app can be found on <a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub</a></string>
     <string name="about_author_string">%s and contributors.</string>
     <string name="about_affiliation">In affiliation with</string>
     <string name="privacy_friendly">This is one of many privacy-friendly apps developed by SECUSO. Source code licensed GPLv3. Images copyright Karlsruhe Institute of Technology and Google Inc.</string>
@@ -43,7 +52,7 @@
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">SECUSO-Website</a></string>
     <string name="about_libraries">Used libraries:</string>
     <string name="lib_url" translatable="false"><a href="https://github.com/zxing">ZXing</a></string>
-    <string name="app_name_long">Privacy Friendly QR Scanner</string>
+    <string name="app_name_long">Security Enhanced QR code scanner</string>
     <string name="version_number">Version v%s</string>
     <string name="delete_items">Delete items</string>
     <string name="scan_text">Place this window atop the code you want to decode.</string>

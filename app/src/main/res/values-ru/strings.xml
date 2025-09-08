@@ -36,7 +36,6 @@
     <string name="github"><a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub-репозиторий</a></string>
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">сайт SECUSO</a></string>
     <string name="about_libraries">Использованные библиотеки:</string>
-    <string name="app_name_long">Privacy Friendly QR Scanner</string>
     <string name="version_number">Версия v%s</string>
     <string name="delete_items">Удаленные</string>
     <string name="scan_text">Place this window atop the code you want to decode.</string>

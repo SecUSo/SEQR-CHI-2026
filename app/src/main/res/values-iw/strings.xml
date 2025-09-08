@@ -54,7 +54,6 @@
     <string name="help_">עזרה</string>
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">SECUSO-אתר</a></string>
     <string name="about_libraries">ספריות בשימוש:</string>
-    <string name="app_name_long">סורק QR ידידותי לפרטיות</string>
     <string name="version_number">גירסא v%s</string>
     <string name="delete_items">מחק פריטים</string>
     <string name="action_clear">נקה היסטוריה</string>

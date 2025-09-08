@@ -40,7 +40,6 @@
     <string name="github"><a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub-Deposu</a></string>
     <string name="url_secuso"><a href="https://www.secuso.org/pfa">SECUSO-İnternet-Sitesi</a></string>
     <string name="about_libraries">Kullanılan kütüphaneler:</string>
-    <string name="app_name_long">Gizlilik Dostu Karekod Tarayıcı</string>
     <string name="version_number">Sürüm v%s</string>
     <string name="delete_items">Öğeleri sil</string>
     <string name="scan_text">Bu pencereyi çözmek istediğiniz kodun üzerine yerleştirin.</string>

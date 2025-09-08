@@ -38,7 +38,6 @@
     <string name="privacy_friendly">Cette application appartient au groupe des applications respectueuses de la vie privée développées par SECUSO. Code source sous licence GPLv3. Images copyright Karlsruhe Institute of Technology et Google Inc.</string>
     <string name="more_info">Plus d\'informations sont disponibles sur :</string>
     <string name="about_libraries">Bibliothèques utilisées :</string>
-    <string name="app_name_long">Scanner de codes QR respectueux de la vie privée</string>
     <string name="version_number">Version v%s</string>
     <string name="delete_items">Supprimer les éléments</string>
     <string name="scan_text">Placez cette fenêtre au-dessus du code que vous souhaitez décoder.</string>
