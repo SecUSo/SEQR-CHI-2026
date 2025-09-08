@@ -12,7 +12,8 @@
             android:title="@string/qr_scanner" />
         <item
             android:id="@+id/nav_generate"
-            android:icon="@drawable/gnrr"
+            android:icon="@drawable/ic_baseline_qr_code_24dp"
+            android:iconTint="@color/black"
             android:title="@string/qr_generator"
             android:visible="false"/>
     </group>

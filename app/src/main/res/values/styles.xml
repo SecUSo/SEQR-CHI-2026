@@ -17,7 +17,6 @@
         <item name="colorNavbarHeaderBackground">@color/white</item>
         <item name="colorNavbarHeaderText">@color/colorPrimary</item>
         <item name="colorURLHighlight">@color/black</item>
-        <item name="secusoLogoDrawable">@drawable/secuso_logo_black</item>
         <item name="colorHostClassificationGrey">@color/url_classification_grey_case</item>
         <item name="colorHostClassificationGreen">@color/url_classification_green_case</item>
         <item name="colorHostClassificationRed">@color/url_classification_red_case</item>
