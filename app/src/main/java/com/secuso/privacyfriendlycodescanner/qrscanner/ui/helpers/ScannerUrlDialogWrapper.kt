@@ -42,6 +42,10 @@ class ScannerUrlDialogWrapper(context: Context, attrs: AttributeSet?) : FrameLay
     private val textUrl: String?
     private val dialogColor: ColorStateList?
 
+    private val continueButtonEnabled: Boolean
+
+    @StringRes
+    private val continueButtonText: Int
     private val continueButtonTextColor: ColorStateList?
 
     init {
@@ -51,10 +55,11 @@ class ScannerUrlDialogWrapper(context: Context, attrs: AttributeSet?) : FrameLay
         textPart2 = array.getResourceId(R.styleable.ScannerUrlDialogWrapper_textPart2, 0)
         textUrl = array.getString(R.styleable.ScannerUrlDialogWrapper_textUrl)
 
+        continueButtonEnabled = array.getBoolean(R.styleable.ScannerUrlDialogWrapper_continueButtonEnabled, true)
+        continueButtonText = array.getResourceId(R.styleable.ScannerUrlDialogWrapper_continueButtonText, 0)
         continueButtonTextColor = array.getColorStateList(R.styleable.ScannerUrlDialogWrapper_continueButtonTextColor)
 
-        val color = array.getColor(R.styleable.ScannerUrlDialogWrapper_dialogColor, 0)
-        dialogColor = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_enabled)), intArrayOf(color))
+        dialogColor = array.getColorStateList(R.styleable.ScannerUrlDialogWrapper_dialogColor)
 
         array.recycle()
     }
@@ -67,8 +72,11 @@ class ScannerUrlDialogWrapper(context: Context, attrs: AttributeSet?) : FrameLay
         findViewById<Button>(R.id.url_dialog_domain).text = textUrl
 
         (findViewById<View>(R.id.dialog_border) as ImageView).imageTintList = dialogColor
-        findViewById<View>(R.id.url_dialog_continue_button).backgroundTintList = dialogColor
+        val continueButton = findViewById<Button>(R.id.url_dialog_continue_button)
 
-        findViewById<Button>(R.id.url_dialog_continue_button).setTextColor(continueButtonTextColor)
+        continueButton.isEnabled = continueButtonEnabled
+        continueButton.backgroundTintList = dialogColor
+        continueButton.setText(continueButtonText)
+        continueButton.setTextColor(continueButtonTextColor)
     }
 }

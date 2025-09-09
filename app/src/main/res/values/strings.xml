@@ -386,7 +386,8 @@
     <string name="url_dialog_risk_explanation_text_part_2"></string>
     <string name="url_dialog_risk_explanation_high_risk_part_1"><b>High Risk:</b> The website encoded in the just-scanned QR code has been associated with phishing before. SEQR deems the risk as high, and disabled the opening of the website.</string>
     <string name="url_dialog_risk_explanation_high_risk_part_2"></string>
-    <string name="url_dialog_website_url_open_time">This website address can be opened in %ds</string>
+    <string name="url_dialog_website_url_open_time">The website address can be opened in %ds</string>
+    <string name="url_dialog_website_url_open_time_tutorial">The website address can be opened in 3s</string>
     <string name="url_dialog_phone_open_time">This phone number can be called in %ds</string>
     <string name="url_dialog_text_open_time">This text can be searched online in %ds</string>
     <string name="url_dialog_add_to_trusted_domains">Add %s to trusted domains.</string>
