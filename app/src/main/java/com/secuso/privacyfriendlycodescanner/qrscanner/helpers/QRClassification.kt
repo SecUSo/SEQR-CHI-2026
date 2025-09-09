@@ -13,7 +13,6 @@ import com.google.zxing.client.result.TelParsedResult
 import com.google.zxing.client.result.TextParsedResult
 import com.google.zxing.client.result.URIParsedResult
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificationDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREEN
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREY_PHONE
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREY_TEXT
@@ -144,7 +143,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 .getBoolean(PreferenceKeys.PHISHING_PROTECTION_RESOLVE_REDIRECTS_ENABLED, true)
         }
 
-        suspend fun getClassification(rawResult: Result, context: Context, urlClassificationDatabase: URLClassificationDatabase?): QRClassification {
+        suspend fun getClassification(rawResult: Result, context: Context): QRClassification {
             val parsedResult = ResultParser.parseResult(rawResult)
             var type =
                 if (
@@ -172,10 +171,10 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
 
             if (type == ParsedResultType.URI) {
                 if (parsedResult.type == ParsedResultType.URI) {
-                    return getURLClassification((parsedResult as URIParsedResult).uri, context, urlClassificationDatabase)
+                    return getURLClassification((parsedResult as URIParsedResult).uri, context)
 
                 } else if (parsedResult.type == ParsedResultType.TEXT) {
-                    return getURLClassification((parsedResult as TextParsedResult).text, context, urlClassificationDatabase)
+                    return getURLClassification((parsedResult as TextParsedResult).text, context)
 
                 } else {
                     // Should not happen, show as text
@@ -207,7 +206,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
             return QRClassification(text, shortText, GREY_TEXT)
         }
 
-        suspend fun getURLClassification(urlString: String, context: Context?, urlClassificationDatabase: URLClassificationDatabase?): QRClassification {
+        suspend fun getURLClassification(urlString: String, context: Context?): QRClassification {
             val rawURL = urlString
             val parsedURL = URL(rawURL)
             val host = parsedURL.host ?: return QRClassification(rawURL, "", GREY_UNKNOWN)
@@ -255,7 +254,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 Log.d(TAG, "Found redirect: $rawURL -> $redirectedURL")
                 if (redirectedURL != rawURL) {
                     Log.d(TAG, "Running recursive check for $redirectedURL")
-                    return getURLClassification(redirectedURL, context, urlClassificationDatabase)
+                    return getURLClassification(redirectedURL, context)
                 }
             }
 
@@ -267,7 +266,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 Log.d(TAG, "ShortLink resolved: $rawURL -> $redirectedURL")
                 if (redirectedURL.isNotEmpty() && redirectedURL != rawURL) {
                     Log.d(TAG, "Running recursive check for $redirectedURL")
-                    return getURLClassification(redirectedURL, context, urlClassificationDatabase)
+                    return getURLClassification(redirectedURL, context)
                 }
             }
 
@@ -279,7 +278,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 Log.d(TAG, "Hex decoded: $host -> $hexDecodedHost")
                 val newURL = rawURL.replace(host, hexDecodedHost)
                 Log.d(TAG, "Running recursive check for $newURL")
-                return getURLClassification(newURL, context, urlClassificationDatabase)
+                return getURLClassification(newURL, context)
             }
 
             // 5. Check if the domain contains utf8-characters that can be converted to ASCII. Run recursive check afterwards.
@@ -290,20 +289,10 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 Log.d(TAG, "ASCII encoded: $host -> $asciiHost")
                 val newURL = rawURL.replace(host, asciiHost)
                 Log.d(TAG, "Running recursive check for $newURL")
-                return getURLClassification(newURL, context, urlClassificationDatabase)
+                return getURLClassification(newURL, context)
             }
 
-            // 6. Check if the base domain was visited multiple times before
-            Log.d(TAG, "Checking url classification database for $rawURL")
-            if (context != null && urlClassificationDatabase != null && baseDomain != null && urlClassificationDatabase.urlDao().findByURL(baseDomain) != null
-                && urlClassificationDatabase.urlDao().findByURL(rawURL)!!.visits >= getVisitsRequired(context)
-            ) {
-                Log.d(TAG, "Found entry with enough visits for $rawURL")
-                case = GREEN
-                Log.d(TAG, "Classification for $rawURL: $case")
-            }
-
-            // 7. Check if the domain is on the known domains list
+            // 6. Check if the domain is on the known domains list
             Log.d(TAG, "Checking known domains for $rawURL")
             if (context != null && getKnownDomains(context).contains(baseDomain)) {
                 Log.d(TAG, "Found known domain for $rawURL")

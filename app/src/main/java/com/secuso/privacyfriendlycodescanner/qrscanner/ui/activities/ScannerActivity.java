@@ -170,7 +170,6 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             urlDialogViewModel.updateURLDialogContinueButton(classification, continueButton, v -> {
                 switch (classification.getCase()) {
                     case GREEN,GREY_UNKNOWN -> {
-                        urlDialogViewModel.incrementVisits(classification);
                         openUrl(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI());
                     }
                     case GREY_TEXT -> {

@@ -26,7 +26,6 @@ import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppDatabase
-import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificationDatabase
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys
 import org.secuso.privacyfriendlybackup.api.backup.DatabaseUtil.deleteRoomDatabase
 import org.secuso.privacyfriendlybackup.api.backup.DatabaseUtil.deleteTables
@@ -139,13 +138,6 @@ class BackupRestorer : IBackupRestorer {
                     BackupCreator.backupDatabaseNameAppDatabase -> readDatabase(
                         AppDatabase::class.java,
                         AppDatabase.DB_NAME,
-                        reader,
-                        context
-                    )
-
-                    BackupCreator.backupDatabaseNameURLClassificationDatabase -> readDatabase(
-                        URLClassificationDatabase::class.java,
-                        URLClassificationDatabase.DB_NAME,
                         reader,
                         context
                     )
