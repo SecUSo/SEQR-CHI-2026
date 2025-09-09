@@ -51,7 +51,7 @@ class TutorialActivity : AppCompatActivity() {
     private var dotsLayout: LinearLayout? = null
     private lateinit var dots: Array<TextView?>
     private lateinit var layouts: IntArray
-    private var btnSkip: Button? = null
+    private var btnPrev: Button? = null
     private var btnNext: Button? = null
     private var prefManager: PrefManager? = null
 
@@ -78,7 +78,7 @@ class TutorialActivity : AppCompatActivity() {
 
         dotsLayout = findViewById<View>(R.id.dotsLayout) as LinearLayout
 
-        btnSkip = findViewById<View>(R.id.btSkip) as Button
+        btnPrev = findViewById<View>(R.id.btBack) as Button
 
         btnNext = findViewById<View>(R.id.btNext) as Button
 
@@ -115,7 +115,16 @@ class TutorialActivity : AppCompatActivity() {
         viewPager!!.adapter = myViewPagerAdapter
         viewPager!!.addOnPageChangeListener(viewPagerPageChangeListener)
 
-        btnSkip!!.setOnClickListener { launchHomeScreen() }
+        btnPrev!!.setOnClickListener {
+            // if first page home screen will be launched
+            val current = getItem(-1)
+            if (current <= -1) {
+                // move to next screen
+                launchHomeScreen()
+            } else {
+                viewPager!!.currentItem = current
+            }
+        }
 
         btnNext!!.setOnClickListener {
             // checking for last page
@@ -182,12 +191,18 @@ class TutorialActivity : AppCompatActivity() {
         // changing the next button text 'NEXT' / 'GOT IT'
         if (position == layouts.size - 1) {
             // last page. make button text to GOT IT
-            btnNext!!.setText(R.string.okay)
-            btnSkip!!.visibility = View.GONE
+            btnNext!!.setText(R.string.close)
+            btnPrev!!.visibility = View.GONE
         } else {
             // still pages are left
             btnNext!!.setText(R.string.next)
-            btnSkip!!.visibility = View.VISIBLE
+            btnPrev!!.visibility = View.VISIBLE
+        }
+        // changing the previous button to 'SKIP' on the first page
+        if (position == 0) {
+            btnPrev!!.setText(R.string.skip)
+        } else {
+            btnPrev!!.setText(R.string.back)
         }
     }
 
