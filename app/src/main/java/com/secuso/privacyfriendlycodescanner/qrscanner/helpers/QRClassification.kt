@@ -151,13 +151,14 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                     ||
                     (parsedResult.type == ParsedResultType.TEXT && (parsedResult.displayResult.startsWith("http://") || parsedResult.displayResult.startsWith("https://")))
                 ) {
-                    // If it is an URI, check if it is valid, otherwise we treat it as text
+                    // Extract the URI
                     val uri = when (parsedResult.type) {
                         ParsedResultType.URI -> (parsedResult as URIParsedResult).uri
                         ParsedResultType.TEXT -> (parsedResult as TextParsedResult).text
                         else -> ""
                     }
-                    if (Utils.extractBaseDomainFromURI(uri) != null) {
+                    // Check if it is a valid uri, otherwise we treat it as text
+                    if (Utils.extractBaseDomainFromURI(uri) != null && URL(uri).host != null) {
                         ParsedResultType.URI
                     } else {
                         ParsedResultType.TEXT
@@ -170,15 +171,13 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
 
 
             if (type == ParsedResultType.URI) {
-                if (parsedResult.type == ParsedResultType.URI) {
-                    return getURLClassification((parsedResult as URIParsedResult).uri, context)
-
-                } else if (parsedResult.type == ParsedResultType.TEXT) {
-                    return getURLClassification((parsedResult as TextParsedResult).text, context)
-
-                } else {
-                    // Should not happen, show as text
-                    return createTextClassification(rawResult.text)
+                return when (parsedResult.type) {
+                    ParsedResultType.URI -> getURLClassification((parsedResult as URIParsedResult).uri, context)
+                    ParsedResultType.TEXT -> getURLClassification((parsedResult as TextParsedResult).text, context)
+                    else -> {
+                        // Should not happen, show as text
+                        createTextClassification(rawResult.text)
+                    }
                 }
             } else if (type == ParsedResultType.TEL) {
                 val phoneNumber = (parsedResult as TelParsedResult).number
@@ -206,16 +205,28 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
             return QRClassification(text, shortText, GREY_TEXT)
         }
 
+        private fun normalizeURL(urlString: String): String {
+            val rawHost = URL(urlString).host ?: throw IllegalArgumentException("The supplied urlString $urlString does not contain a host part.")
+            val intermediateURL = urlString.replace(rawHost, rawHost.lowercase())
+            return if (URL(intermediateURL).protocol.lowercase() == "http") {
+                "http" + intermediateURL.substring(4)
+            } else if (URL(intermediateURL).protocol.lowercase() == "https") {
+                "https" + intermediateURL.substring(5)
+            } else {
+                intermediateURL
+            }
+        }
+
         suspend fun getURLClassification(urlString: String, context: Context?): QRClassification {
-            val rawURL = urlString
+            val rawURL = normalizeURL(urlString)
             val parsedURL = URL(rawURL)
-            val host = parsedURL.host ?: return QRClassification(rawURL, "", GREY_UNKNOWN)
+            val host = parsedURL.host
             val protocol = parsedURL.protocol
             val path = parsedURL.path
             val parameters = parsedURL.query
             val baseDomain: String? = Utils.extractBaseDomainFromURI(rawURL)
             Log.d(
-                TAG, "Performing classification for $rawURL\n" +
+                TAG, "Performing URL classification for $rawURL ($urlString)\n" +
                         "host: $host\n" +
                         "protocol: $protocol\n" +
                         "path: $path\n" +
