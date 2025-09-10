@@ -18,8 +18,6 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREY_TEXT
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREY_UNKNOWN
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.RED
-import io.michaelrocks.libphonenumber.android.NumberParseException
-import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import java.net.IDN
 import java.net.URL
 import java.net.URLDecoder
@@ -181,20 +179,7 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
                 }
             } else if (type == ParsedResultType.TEL) {
                 val phoneNumber = (parsedResult as TelParsedResult).number
-                val phoneUtil = PhoneNumberUtil.createInstance(context)
-                try {
-                    val numberProto = phoneUtil.parse(phoneNumber, null)
-                    if (!phoneUtil.isValidNumber(numberProto)) {
-                        // Show as text
-                        return createTextClassification(rawResult.text)
-                    } else {
-                        val regionISO = phoneUtil.getRegionCodeForCountryCode(numberProto.countryCode)
-                        return QRClassification(phoneNumber, regionISO, GREY_PHONE)
-                    }
-                } catch (e: NumberParseException) {
-                    // Show as text
-                    return createTextClassification(rawResult.text)
-                }
+                return QRClassification(rawResult.text, phoneNumber, GREY_PHONE)
             } else {
                 return createTextClassification(rawResult.text)
             }

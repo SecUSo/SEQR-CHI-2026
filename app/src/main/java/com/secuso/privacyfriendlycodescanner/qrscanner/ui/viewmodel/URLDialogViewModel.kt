@@ -45,6 +45,7 @@ import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.RED
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Companion.getClassification
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.Utils
+import io.michaelrocks.libphonenumber.android.NumberParseException
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -152,10 +153,17 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun getPhoneNumberText(classification: QRClassification): String {
-        val phoneNumber = classification.text
+        val phoneNumber = classification.shortText
         val phoneUtil = PhoneNumberUtil.createInstance(context)
-        val numberProto = phoneUtil.parse(phoneNumber, null)
-        return "+" + numberProto.countryCode + "(${classification.shortText})\n" + numberProto.nationalNumber
+        try {
+            val numberProto = phoneUtil.parse(phoneNumber, null)
+            if (phoneUtil.isValidNumber(numberProto)) {
+                val regionISO = phoneUtil.getRegionCodeForCountryCode(numberProto.countryCode)
+                return "+" + numberProto.countryCode + "(${regionISO})\n" + numberProto.nationalNumber
+            }
+        } catch (_: NumberParseException) {
+        }
+        return phoneNumber
     }
 
     private fun getButtonText(classification: QRClassification, timeRemaining: Int, activity: Activity): String {
