@@ -1,10 +1,12 @@
 package com.secuso.privacyfriendlycodescanner.qrscanner
 
 import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificationDatabase
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.URLEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Companion.getClassification
@@ -18,13 +20,35 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class URLClassificationTest {
-    lateinit var instrumentationContext: Context
+    lateinit var applicationContext: Context
+    private lateinit var urlClassificationDatabase: URLClassificationDatabase
 
     @Before
     fun setup() {
-        instrumentationContext = InstrumentationRegistry.getInstrumentation().context
+        applicationContext = ApplicationProvider.getApplicationContext()
         QRClassification.setShortLinkDomains(listOf("bit.ly", "shorturl.at", "tinyurl.com").toSet())
         QRClassification.setKnownDomains(listOf("google.com", "nytimes.com").toSet())
+        urlClassificationDatabase = URLClassificationDatabase.getDatabase(applicationContext)
+    }
+
+    private suspend fun setupDatabase() {
+        val databaseEntries = listOf(Pair("example1.com", 1), Pair("example2.com", 2))
+        urlClassificationDatabase.urlDao().deleteAll()
+        for ((domain, visits) in databaseEntries) {
+            for (i in 0..<visits) {
+                incrementVisitsInDatabase(domain)
+            }
+        }
+    }
+
+    private suspend fun incrementVisitsInDatabase(baseDomain: String) {
+        var dbEntry = urlClassificationDatabase.urlDao().findByURL(baseDomain)
+        if (dbEntry == null) {
+            dbEntry = URLEntity(0, baseDomain, baseDomain, 0)
+            urlClassificationDatabase.urlDao().insert(dbEntry)
+            dbEntry = urlClassificationDatabase.urlDao().findByURL(baseDomain)
+        }
+        urlClassificationDatabase.urlDao().incrementVisits(dbEntry!!.id)
     }
 
     @Test
@@ -117,19 +141,18 @@ class URLClassificationTest {
         }
     }
 
-    @Ignore("Does not work with mocked context")
     @Test
     @Throws(Exception::class)
     fun check_unknown_risk_phone_number_case_grey() {
         runBlocking {
-            Assert.assertEquals(Case.GREY_PHONE, getClassification("tel:+49015238987031").case)
+            Assert.assertEquals(Case.GREY_PHONE, getTextClassification("tel:+49015238987031").case)
         }
     }
 
     @Test
     fun check_unknown_risk_text_numbers_case_grey() {
         runBlocking {
-            Assert.assertEquals(Case.GREY_TEXT, getClassification("8745873265981238658743650812983758743658932720568730168795263487561802364587").case)
+            Assert.assertEquals(Case.GREY_TEXT, getTextClassification("8745873265981238658743650812983758743658932720568730168795263487561802364587").case)
         }
     }
 
@@ -138,7 +161,7 @@ class URLClassificationTest {
         runBlocking {
             Assert.assertEquals(
                 Case.GREY_TEXT,
-                getClassification("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, q").case
+                getTextClassification("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, q").case
             )
         }
     }
@@ -146,9 +169,50 @@ class URLClassificationTest {
     @Test
     fun check_hex_encoded_domain_preview_correct() {
         runBlocking {
-            val classification = getClassification("https://goo%67le.com/xyz%67/")
+            val classification = getTextClassification("https://goo%67le.com/xyz%67/")
             Assert.assertEquals("google.com", classification.shortText)
             Assert.assertEquals("https://google.com/xyz%67/", classification.text)
+            Assert.assertEquals(Case.GREEN, classification.case)
+        }
+    }
+
+    @Test
+    fun check_unknown_risk_domain_increment_visits_case_change() {
+        runBlocking {
+            setupDatabase()
+            val baseDomain = "example3.com"
+            Assert.assertEquals(Case.GREY_UNKNOWN, getTextClassification("https://$baseDomain/").case)
+            incrementVisitsInDatabase(baseDomain)
+            Assert.assertEquals(Case.GREY_UNKNOWN, getTextClassification("https://$baseDomain/").case)
+            incrementVisitsInDatabase(baseDomain)
+            Assert.assertEquals(Case.GREEN, getTextClassification("https://$baseDomain/").case)
+            incrementVisitsInDatabase(baseDomain)
+        }
+    }
+
+    @Test
+    fun check_unknown_risk_domain_with_1_visit_case_grey() {
+        runBlocking {
+            setupDatabase()
+            val classification = getTextClassification("https://example1.com")
+            Assert.assertEquals(Case.GREY_UNKNOWN, classification.case)
+        }
+    }
+
+    @Test
+    fun check_unknown_risk_domain_with_2_visits_case_green() {
+        runBlocking {
+            setupDatabase()
+            val classification = getTextClassification("https://example2.com")
+            Assert.assertEquals(Case.GREEN, classification.case)
+        }
+    }
+
+    @Test
+    fun check_unknown_risk_domain_with_2_visits_and_path_case_green() {
+        runBlocking {
+            setupDatabase()
+            val classification = getTextClassification("https://example2.com/some/path")
             Assert.assertEquals(Case.GREEN, classification.case)
         }
     }
@@ -156,12 +220,12 @@ class URLClassificationTest {
 
     @Throws(InterruptedException::class)
     private suspend fun getURLClassification(url: String): QRClassification {
-        return getURLClassification(url, instrumentationContext, null)
+        return getURLClassification(url, applicationContext, urlClassificationDatabase)
     }
 
-    private suspend fun getClassification(text: String): QRClassification {
+    private suspend fun getTextClassification(text: String): QRClassification {
         val result = Result(text, null, null, BarcodeFormat.QR_CODE)
 
-        return getClassification(result, instrumentationContext, null)
+        return getClassification(result, applicationContext, urlClassificationDatabase)
     }
 }
