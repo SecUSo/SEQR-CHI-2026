@@ -144,10 +144,10 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 
         urlDialogViewModel.getClassification().removeObservers(this);
         urlDialogViewModel.initURLDialog(result.getResult());
-        findViewById(R.id.progressBarURLDialog).setVisibility(View.VISIBLE);
+        findViewById(R.id.urlDialogProcessingOverlay).setVisibility(View.VISIBLE);
         urlDialogViewModel.getClassification().observe(this, QRClassification -> {
             if (QRClassification != null) {
-                findViewById(R.id.progressBarURLDialog).setVisibility(View.GONE);
+                findViewById(R.id.urlDialogProcessingOverlay).setVisibility(View.GONE);
                 showURLDialog(QRClassification, result);
             }
         });

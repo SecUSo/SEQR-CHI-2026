@@ -373,6 +373,7 @@
         <item>Brave</item>
     </string-array>
     <string name="pref_search_engine_default" translatable="false">DUCK_DUCK_GO</string>
+    <string name="url_dialog_working_on_it">Scan complete.\nProcessing content...</string>
     <string name="url_dialog_continue_button_url">Open the website address now</string>
     <string name="url_dialog_continue_button_phone">Call the phone number now</string>
     <string name="url_dialog_continue_button_text">Search online now</string>
