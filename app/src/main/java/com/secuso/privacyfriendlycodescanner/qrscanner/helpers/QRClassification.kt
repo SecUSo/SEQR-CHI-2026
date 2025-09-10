@@ -290,19 +290,19 @@ class QRClassification(val text: String, val shortText: String, val case: Case) 
             }
 
             // 6. Check if the base domain was visited multiple times before
-            Log.d(TAG, "Checking url classification database for $rawURL")
+            Log.d(TAG, "Checking url classification database for $baseDomain")
             if (context != null && urlClassificationDatabase != null && baseDomain != null && urlClassificationDatabase.urlDao().findByURL(baseDomain) != null
-                && urlClassificationDatabase.urlDao().findByURL(rawURL)!!.visits >= getVisitsRequired(context)
+                && urlClassificationDatabase.urlDao().findByURL(baseDomain)!!.visits >= getVisitsRequired(context)
             ) {
-                Log.d(TAG, "Found entry with enough visits for $rawURL")
+                Log.d(TAG, "Found entry with enough visits for $baseDomain")
                 case = GREEN
                 Log.d(TAG, "Classification for $rawURL: $case")
             }
 
             // 7. Check if the domain is on the known domains list
-            Log.d(TAG, "Checking known domains for $rawURL")
+            Log.d(TAG, "Checking known domains for $baseDomain")
             if (context != null && getKnownDomains(context).contains(baseDomain)) {
-                Log.d(TAG, "Found known domain for $rawURL")
+                Log.d(TAG, "Found known domain for $baseDomain")
                 case = GREEN
                 Log.d(TAG, "Classification for $rawURL: $case")
             }
