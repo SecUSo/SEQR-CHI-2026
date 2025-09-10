@@ -37,6 +37,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.Result
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificationDatabase
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.TrustedDomainEntity
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.entities.URLEntity
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREEN
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.QRClassification.Case.GREY_PHONE
@@ -68,7 +71,18 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val _urlDialogContinueButtonTimer = MutableLiveData<Long>()
 
+    private val urlClassificationDatabase = URLClassificationDatabase.getDatabase(application)
     private val context by lazy { application.applicationContext }
+
+    private fun addToTrustedDomains(classification: QRClassification) {
+        viewModelScope.launch {
+            var dbEntry = urlClassificationDatabase.trustedDomainDao().findByDomain(classification.shortText)
+            if (dbEntry == null) {
+                dbEntry = TrustedDomainEntity(0, classification.shortText)
+                urlClassificationDatabase.trustedDomainDao().insert(dbEntry)
+            }
+        }
+    }
 
     private fun createUrlDetailsDialog(classification: QRClassification, view: View, activity: Activity): MaterialAlertDialogBuilder {
         val message = if (classification.case in listOf(RED, GREY_UNKNOWN, GREEN)) {
@@ -99,7 +113,26 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
     fun initURLDialog(rawResult: Result) {
         _classification.value = null
         viewModelScope.launch(Dispatchers.IO) {
-            this@URLDialogViewModel._classification.postValue(getClassification(rawResult, context))
+            this@URLDialogViewModel._classification.postValue(getClassification(rawResult, context, urlClassificationDatabase))
+        }
+    }
+
+    fun incrementVisits(classification: QRClassification) {
+        if (classification.case == GREEN || !QRClassification.isUrlTrackingEnabled(context)) {
+            return
+        }
+        viewModelScope.launch {
+            // We only use the short text to identify the base domain
+            val url = classification.shortText
+            if (classification.case == GREY_UNKNOWN) {
+                var dbEntry = urlClassificationDatabase.urlDao().findByURL(url)
+                if (dbEntry == null) {
+                    dbEntry = URLEntity(0, url, classification.shortText, 0)
+                    urlClassificationDatabase.urlDao().insert(dbEntry)
+                    dbEntry = urlClassificationDatabase.urlDao().findByURL(url)
+                }
+                urlClassificationDatabase.urlDao().incrementVisits(dbEntry!!.id)
+            }
         }
     }
 

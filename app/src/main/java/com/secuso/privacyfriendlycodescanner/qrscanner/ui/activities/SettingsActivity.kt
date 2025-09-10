@@ -17,25 +17,44 @@
 */
 package com.secuso.privacyfriendlycodescanner.qrscanner.ui.activities
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.secuso.privacyfriendlycodescanner.qrscanner.R
 import com.secuso.privacyfriendlycodescanner.qrscanner.helpers.PreferenceKeys
+import com.secuso.privacyfriendlycodescanner.qrscanner.ui.adapter.EditableListAdapter
+import com.secuso.privacyfriendlycodescanner.qrscanner.ui.viewmodel.SettingsViewModel
 
 
 class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
     class MainPreferenceFragment : PreferenceFragmentCompat() {
+        private lateinit var viewModel: SettingsViewModel
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            viewModel = ViewModelProvider(this)[SettingsViewModel::class.java];
             setPreferencesFromResource(R.xml.preferences, rootKey)
             bindPreferenceSummaryToValue(findPreference(PreferenceKeys.SEARCH_ENGINE)!!)
             findPreference<Preference>(PreferenceKeys.APP_THEME)!!.onPreferenceChangeListener =
@@ -49,6 +68,32 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
                     }
                     true
                 }
+            findPreference<Preference>("pref_url_classification_visited_urls")?.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener { preference: Preference? ->
+                    createEditableListViewDialog(
+                        R.string.url_dialog_settings_edit_visited_urls_title,
+                        viewModel.urlEntities,
+                        { EditableListAdapter.Data(getString(R.string.url_dialog_settings_visited_url_info, it.url, it.visits), it.id) },
+                        { data -> viewModel.deleteURLEntity(data.id) },
+                        { data -> viewModel.getURLEntityAndPerformAction(data.id, { entity -> copyToClipboard(entity.url) }) },
+                        { viewModel.deleteAllURLEntities() },
+                        requireContext()
+                    ).show()
+                    true
+                }
+            findPreference<Preference>("pref_url_classification_trusted_domains")?.onPreferenceClickListener =
+                Preference.OnPreferenceClickListener { preference: Preference? ->
+                    createEditableListViewDialog(
+                        R.string.url_dialog_settings_edit_trusted_domains_title,
+                        viewModel.domainEntities,
+                        { EditableListAdapter.Data(it.baseDomain, it.id) },
+                        { data -> viewModel.deleteDomainEntity(data.id) },
+                        { data -> viewModel.getDomainEntityAndPerformAction(data.id, { entity -> copyToClipboard(entity.baseDomain) }) },
+                        { viewModel.deleteAllDomainEntities() },
+                        requireContext()
+                    ).show()
+                    true
+                }
             findPreference<EditTextPreference>(PreferenceKeys.URL_CLASSIFICATION_GREY_CASE_WAITING_TIME)?.setOnBindEditTextListener { setEditTextProperties(it) }
         }
 
@@ -58,6 +103,54 @@ class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
             editText.setSelectAllOnFocus(true)
             editText.selectAll()
             editText.filters = arrayOf(InputFilter.LengthFilter(2))
+        }
+
+        private fun <T> createEditableListViewDialog(
+            @StringRes title: Int,
+            dataSource: LiveData<List<T>>,
+            converter: (T) -> EditableListAdapter.Data,
+            buttonAction: (data: EditableListAdapter.Data) -> Unit,
+            textAction: (data: EditableListAdapter.Data) -> Unit,
+            deleteAllAction: () -> Unit,
+            context: Context
+        ): MaterialAlertDialogBuilder {
+            val simpleAdapter = EditableListAdapter(buttonAction, textAction)
+
+            val view = LayoutInflater.from(context).inflate(R.layout.dialog_manage_list, null, false)
+            val totalEntriesTextView = view.findViewById<TextView>(R.id.totalEntitiesTextView)
+            view.findViewById<ImageButton>(R.id.delete_all_button).setOnClickListener {
+                MaterialAlertDialogBuilder(context).setTitle(R.string.delete_all).setMessage(R.string.delete_all_confirmation)
+                    .setCancelable(true).setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.yes) { _, _ -> deleteAllAction() }.show()
+            }
+            view.findViewById<RecyclerView>(R.id.item_list).apply {
+                layoutManager = LinearLayoutManager(context)
+                val dividerItemDecoration = DividerItemDecoration(
+                    getContext(),
+                    (layoutManager as LinearLayoutManager).orientation
+                )
+                addItemDecoration(dividerItemDecoration)
+                adapter = simpleAdapter
+            }
+            dataSource.observe(this, { list ->
+                simpleAdapter.updateData(list.map(converter))
+                totalEntriesTextView.setText(getString(R.string.number_of_entries, list.size))
+            })
+            val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
+                .setView(view)
+                .setTitle(title)
+                .setCancelable(false)
+                .setNegativeButton(R.string.close) { _, _ -> dataSource.removeObservers(this) }
+            return builder
+        }
+
+        private fun copyToClipboard(text: String) {
+            (requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+                ClipData.newPlainText("URL", text)
+            )
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                Toast.makeText(activity, R.string.content_copied, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

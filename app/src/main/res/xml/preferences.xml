@@ -73,6 +73,20 @@
             android:key="pref_url_classification_grey_case_waiting_time"
             android:summary="@string/url_dialog_settings_waiting_time_summary"
             android:title="@string/url_dialog_settings_waiting_time_title" />
+        <Preference
+            android:key="pref_url_classification_visited_urls"
+            android:summary="@string/url_dialog_settings_visited_urls_summary"
+            android:title="@string/url_dialog_settings_visited_urls_title" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_url_classification_url_tracking_enabled"
+            android:summary="@string/url_dialog_settings_disable_tracking_visits_summary"
+            android:title="@string/url_dialog_settings_disable_tracking_visits_title" />
+        <Preference
+            android:key="pref_url_classification_trusted_domains"
+            android:summary="@string/url_dialog_settings_trusted_domains_summary"
+            android:title="@string/url_dialog_settings_trusted_domains_title"
+            app:isPreferenceVisible="false" />
     </com.secuso.privacyfriendlycodescanner.qrscanner.ui.helpers.ExtendedSummaryPreferenceCategory>
 
 </PreferenceScreen>

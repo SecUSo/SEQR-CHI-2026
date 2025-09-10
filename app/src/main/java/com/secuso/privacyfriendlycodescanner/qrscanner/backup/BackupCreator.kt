@@ -27,6 +27,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import com.secuso.privacyfriendlycodescanner.qrscanner.database.AppDatabase
+import com.secuso.privacyfriendlycodescanner.qrscanner.database.URLClassificationDatabase
 import org.secuso.privacyfriendlybackup.api.backup.DatabaseUtil.writeDatabase
 import org.secuso.privacyfriendlybackup.api.backup.PreferenceUtil.writePreferences
 import org.secuso.privacyfriendlybackup.api.pfa.IBackupCreator
@@ -72,6 +73,7 @@ class BackupCreator : IBackupCreator {
             writer.beginObject()
 
             writeDatabase(AppDatabase.DB_NAME, AppDatabase.VERSION, backupDatabaseNameAppDatabase, writer, context)
+            writeDatabase(URLClassificationDatabase.DB_NAME, URLClassificationDatabase.VERSION, backupDatabaseNameURLClassificationDatabase, writer, context)
 
             Log.d(TAG, "Writing preferences")
             writer.name("preferences")

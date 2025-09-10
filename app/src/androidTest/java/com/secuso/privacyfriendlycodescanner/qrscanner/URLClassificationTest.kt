@@ -156,12 +156,12 @@ class URLClassificationTest {
 
     @Throws(InterruptedException::class)
     private suspend fun getURLClassification(url: String): QRClassification {
-        return getURLClassification(url, instrumentationContext)
+        return getURLClassification(url, instrumentationContext, null)
     }
 
     private suspend fun getClassification(text: String): QRClassification {
         val result = Result(text, null, null, BarcodeFormat.QR_CODE)
 
-        return getClassification(result, instrumentationContext)
+        return getClassification(result, instrumentationContext, null)
     }
 }
