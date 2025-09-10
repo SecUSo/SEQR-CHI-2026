@@ -110,6 +110,15 @@ class URLDialogViewModel(application: Application) : AndroidViewModel(applicatio
         return builder
     }
 
+    fun createNetworkErrorDialog(activity: Activity): MaterialAlertDialogBuilder {
+        val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(activity, R.style.AppTheme_CustomMaterialDialog)
+            .setMessage(R.string.url_dialog_network_error_message)
+            .setTitle(R.string.url_dialog_network_error_title)
+            .setCancelable(true)
+            .setNegativeButton(android.R.string.ok, null)
+        return builder
+    }
+
     fun initURLDialog(rawResult: Result) {
         _classification.value = null
         viewModelScope.launch(Dispatchers.IO) {

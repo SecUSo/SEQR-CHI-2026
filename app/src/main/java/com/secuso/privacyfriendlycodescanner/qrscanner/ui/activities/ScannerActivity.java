@@ -43,8 +43,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -157,7 +159,20 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
 //            startActivity(resultIntent);
     }
 
-    private void showURLDialog(QRClassification classification, BarcodeResult result) {
+    private void showURLDialog(QRClassification rawClassification, BarcodeResult result) {
+        // Show Dialog if we had a network error during classification and change the classification
+        if (rawClassification.getNetworkError()) {
+            AlertDialog dialog = urlDialogViewModel.createNetworkErrorDialog(this).show();
+            TextView dialogContent = dialog.getWindow().findViewById(android.R.id.message);
+            dialogContent.setTypeface(ResourcesCompat.getFont(this, R.font.lexend));
+        }
+        QRClassification classification;
+        if (rawClassification.getNetworkError()) {
+            classification = new QRClassification(rawClassification.getText(), rawClassification.getShortText(), QRClassification.Case.GREY_UNKNOWN, true);
+        } else {
+            classification = rawClassification;
+        }
+
         View urlDialog = findViewById(R.id.activity_scanner_url_dialog);
         urlDialogViewModel.setupURLDialogView(urlDialog, classification, this);
         urlDialog.setVisibility(View.VISIBLE);
@@ -169,7 +184,7 @@ public class ScannerActivity extends BaseActivity implements NavigationView.OnNa
             Button continueButton = findViewById(R.id.url_dialog_continue_button);
             urlDialogViewModel.updateURLDialogContinueButton(classification, continueButton, v -> {
                 switch (classification.getCase()) {
-                    case GREEN,GREY_UNKNOWN -> {
+                    case GREEN, GREY_UNKNOWN -> {
                         urlDialogViewModel.incrementVisits(classification);
                         openUrl(((URIParsedResult) ResultParser.parseResult(result.getResult())).getURI());
                     }

@@ -398,6 +398,8 @@
     <string name="full_url_dialog_copy">Copy</string>
     <string name="full_url_dialog_copy_high_risk">Copy</string>
     <string name="full_url_dialog_close_high_risk">Cancel (Recommended)</string>
+    <string name="url_dialog_network_error_message">SEQR could not perform all the security checks. This can happen if you\'re not connected to the internet or the service is not reachable.</string>
+    <string name="url_dialog_network_error_title">Important information</string>
     <string name="url_tutorial_slide_1_title">Info [1/9]: Preliminary information</string>
     <string name="url_tutorial_slide_1_content">The QR code scanner application assists you in determining whether it\'s safe to visit the website address associated with a scanned QR code.\n\nImmediately after scanning the QR code, but before the website address is loaded into the browser or an application, the scanner presents a dialog window containing the domain of the website associated with the QR code.</string>
     <string name="url_tutorial_slide_2_title">Info [2/9]: Domain of the website address</string>
