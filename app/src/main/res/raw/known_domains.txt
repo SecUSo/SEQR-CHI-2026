@@ -1,4 +1,5 @@
-# https://tranco-list.eu/list/KWWGW/100
+# Based on Tranco list (https://tranco-list.eu/list/KWWGW/100, Last update: 01.09.2025),
+# untrustworthy domains removed by developers, filled up to 100 entries.
 google.com
 facebook.com
 youtube.com
@@ -38,7 +39,7 @@ tumblr.com
 spotify.com
 qq.com
 miit.gov.cn
-f5.com
+# f5.com
 macromedia.com
 archive.org
 nih.gov
@@ -46,7 +47,7 @@ forms.gle
 office.com
 nytimes.com
 flickr.com
-amazonaws.com
+# amazonaws.com
 live.com
 medium.com
 paypal.com
@@ -63,7 +64,7 @@ bbc.com
 sourceforge.net
 bbc.co.uk
 shopify.com
-cloudflare.com
+# cloudflare.com
 sciencedirect.com
 mit.edu
 researchgate.net
@@ -99,3 +100,6 @@ twitch.tv
 springer.com
 dailymail.co.uk
 washingtonpost.com
+ibm.com
+gnu.org
+canva.com
