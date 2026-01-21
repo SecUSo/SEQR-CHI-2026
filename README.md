@@ -1,14 +1,14 @@
 # Security Enhanced QR code scanner (SEQR)
 
 SEQR is a prototype QR‑code reader built to safeguard users against malicious QR codes.
-It augments the conventional scanning workflow with a suite of security features.
+It enhances the conventional scanning workflow with a suite of security features.
 This version presents a review‑ready build of SEQR,
 intended for academic evaluation and user‑testing to validate its effectiveness,
 usability, and resilience against emerging QR‑based attack vectors.
-\n
-\n
-This app is based on the app "Privacy Friendly QR Scanner", whose source code is licensed under GPLv3, as is this app\'s source code.
-More information about the original app can be found on <a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub</a>
+
+
+This app is based on the app "Privacy Friendly QR Scanner", which source code is licensed under GPLv3, as is this app\'s source code.
+More information about the original app can be found on <a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub</a>.
 
 ## Citation
 ```
@@ -17,6 +17,8 @@ More information about the original app can be found on <a href="https://github.
   author = {Mossano, Mattia and Veit, Maxime Fabian and Länge, Tobias and Berens, Benjamin Maximilian and Sharevski, Filipo and Volkamer, Melanie},
   note = {Mattia Mossano and Maxime Fabian Veit contributed equally},
   booktitle = {Proceedings of the 2026 CHI Conference on Human Factors in Computing Systems},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
   year = {2026},
   url = {https://doi.org/10.1145/3772318.3793213},
   doi = {10.1145/3772318.3793213},
@@ -41,6 +43,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-The icons used in the nagivation drawer are licensed under the [CC BY 2.5](http://creativecommons.org/licenses/by/2.5/).
-In addition to them the app uses icons from [Google Design Material Icons](https://design.google.com/icons/index.html) licensed under Apache License Version 2.0.
+The icons used in the navigation drawer are licensed under the [CC BY 2.5](http://creativecommons.org/licenses/by/2.5/).
+In addition to them, the app uses icons from [Google Design Material Icons](https://design.google.com/icons/index.html) licensed under Apache License Version 2.0.
 
