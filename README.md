@@ -10,6 +10,20 @@ usability, and resilience against emerging QR‑based attack vectors.
 This app is based on the app "Privacy Friendly QR Scanner", whose source code is licensed under GPLv3, as is this app\'s source code.
 More information about the original app can be found on <a href="https://github.com/SecUSo/privacy-friendly-qr-scanner">GitHub</a>
 
+## Citation
+```
+@inproceedings{10.1145/3772318.3793213,
+  title = {Development, Evaluation, and Implementation of SEQR – a Usable Secure QR code Scanner},
+  author = {Mossano, Mattia and Veit, Maxime Fabian and Länge, Tobias and Berens, Benjamin Maximilian and Sharevski, Filipo and Volkamer, Melanie},
+  note = {Mattia Mossano and Maxime Fabian Veit contributed equally},
+  booktitle = {Proceedings of the 2026 CHI Conference on Human Factors in Computing Systems},
+  year = {2026},
+  url = {https://doi.org/10.1145/3772318.3793213},
+  doi = {10.1145/3772318.3793213},
+  location = {Barcelona, Spain}
+}
+```
+
 ## License
 
 SEQR is licensed under the GPLv3.
